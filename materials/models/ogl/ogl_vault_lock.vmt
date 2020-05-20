@@ -1,0 +1,11 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/ogl/ogl_vault_lock"
+	"$bumpMap" "models/ogl/ogl_vault_lock_nrm"
+	$phong "1"
+	$phongexponent "20"
+	$phongfresnelranges "[0.15 0.65 1.00]"
+	$phongalbedotint "1"
+	$phongboost "200"
+	$ambientocclusion 1
+}
