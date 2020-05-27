@@ -17,9 +17,11 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
+	self:NextThink(CurTime())
+
 	if ogl_vault.config.maxraiderdist then
 		local raidID = ogl_vault.raidmanager:GetVaultRaidID(self)
-		if !raidID then return end
+		if !raidID then return true end
 		local raid = ogl_vault.raidmanager.raids[raidID]
 
 		local vaultPos = self:GetPos()
@@ -33,6 +35,8 @@ function ENT:Think()
 			end
 		end
 	end
+
+	return true
 end
 
 function ENT:Use(ply)
@@ -80,7 +84,6 @@ function ENT:OpenVault()
 	self:SetTimerEnd(0)
 
 	self:ResetSequence(0)
-	self:SetSequence(0)
 
 	timer.Simple(self:SequenceDuration(0), function()
 		local raidID = ogl_vault.raidmanager:GetVaultRaidID(self)
