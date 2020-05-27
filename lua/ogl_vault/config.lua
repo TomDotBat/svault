@@ -50,7 +50,7 @@ ogl_vault.config.rewardmembermultiplier = 2000 --How much extra should the polic
 
 ogl_vault.config.dropmoney = false --Should we drop the money in front of the bank instead of giving the split to players directly?
 
-ogl_vault.config.draw3d2ddist = 480000 --What should be the maximum distance from the vault that you can see the 3D2D at?
+ogl_vault.config.draw3d2ddist = 690 --What should be the maximum distance from the vault that you can see the 3D2D at?
 
 ogl_vault.config.preventphysgun = true --Should we prevent permanent vaults from being physgunned?
 ogl_vault.config.preventtoolgun = true --Should we prevent permanent vaults from being toolgunned?
