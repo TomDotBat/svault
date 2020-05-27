@@ -13,3 +13,10 @@ function ENT:SetupDataTables()
         self:SetOpened(false)
     end
 end
+
+function ENT:GetHacker()
+    local owner = self:CPPIGetOwner()
+    if owner then return owner end
+
+    return self.Getowning_ent and self:Getowning_ent()
+end

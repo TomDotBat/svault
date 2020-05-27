@@ -15,3 +15,11 @@ function ENT:Initialize()
         phys:Wake()
     end
 end
+
+function ENT:SetHacker(ply)
+    if self.Setowning_ent then
+        self:Setowning_ent(ply)
+    end
+    
+    self:CPPISetOwner(ply)
+end
