@@ -4,12 +4,12 @@ include("shared.lua")
 
 function ENT:Initialize()
 	self:SetModel("models/ogl/ogl_vault_v2.mdl")
-	self:PhysicsInit(SOLID_VPHYSICS)      
+	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
 
-    local phys = self:GetPhysicsObject()
+	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
@@ -97,18 +97,18 @@ function ENT:OpenVault()
 		if ogl_vault.config.dropmoney then
 			DarkRP.createMoneyBag(self:LocalToWorld(Vector(-70, 35, 50)), self:GetValue())
 		else
-			local split = self:GetValue()/#raid.participants
+			local split = self:GetValue() / #raid.participants
 			for k,v in ipairs(raid.participants) do
 				v:addMoney(split)
 			end
 		end
 
 		self:SetValue(0)
-	end)	
+	end)
 end
 
 function ENT:CloseVault()
-	
+
 end
 
 function ENT:StartCooldown()
@@ -117,7 +117,7 @@ function ENT:StartCooldown()
 	self:SetTimerEnd(CurTime() + ogl_vault.config.cooldowntime)	self:SetRobberNames("")
 	self:SetRobberNames("")
 
-	timer.Create("OGLVaultCooldownTimer"..self:EntIndex(), ogl_vault.config.cooldowntime, 1, function()
+	timer.Create("OGLVaultCooldownTimer" .. self:EntIndex(), ogl_vault.config.cooldowntime, 1, function()
 		self:SetState(VAULT_IDLE)
 		self:SetTimerLength(0)
 		self:SetTimerEnd(0)
