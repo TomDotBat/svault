@@ -16,6 +16,11 @@ function ENT:Initialize()
     end
 end
 
+function ENT:Think()
+    self:NextThink(CurTime())
+    return true
+end
+
 function ENT:SetHacker(ply)
     if self.Setowning_ent then
         self:Setowning_ent(ply)
@@ -28,3 +33,17 @@ hook.Add("playerBoughtCustomEntity", "OGLVaultSetHacker", function(ply, enttbl, 
     if ent:GetClass() != "ogl_vault_hacker" then return end
     ent:SetHacker(ply)
 end)
+
+function ENT:Use(ply)
+    if not IsValid(ply) or not ply:IsPlayer() then return end
+    if ply != self:GetHacker() then return end
+
+    local newState = not self:GetOpened()
+    self:SetOpened(newState)
+
+    if newState then
+        self:ResetSequence(1)
+    else
+        self:ResetSequence(0)
+    end
+end
