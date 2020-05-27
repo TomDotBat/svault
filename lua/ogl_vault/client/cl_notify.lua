@@ -5,5 +5,5 @@ net.Receive("OGLVaultNotify", function(len)
 	elseif ogl_vault.config.notifymethod == 2 then
 		surface.PlaySound("buttons/button14.wav")
 		notification.AddLegacy(net.ReadString(), NOTIFY_GENERIC, 5)
-	end	
+	end
 end)

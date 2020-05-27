@@ -1,17 +1,17 @@
-include("shared.lua")
+    include("shared.lua")
 
-surface.CreateFont("OGLBankTitle", {
+    surface.CreateFont("OGLBankTitle", {
     font = "Montserrat",
     size = 230,
     weight = 500
-})
+    })
 
 
-local w, h = 2425, 4025
+    local w, h = 2425, 4025
 
-function ENT:Draw()
+    function ENT:Draw()
     self:DrawModel()
-    
+
     if !ogl_vault.lang then return end
     if !self.ShouldDraw3D2D then return end
 
@@ -40,7 +40,7 @@ function ENT:Draw()
         draw.RoundedBox(20, w*.04, offy+th*1.4-40, w*.92, 40, ogl_vault.config.primaryCol)
 
         draw.SimpleText(vaultname, "OGLBankTitle", w/2, offy+th*.7, ogl_vault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-       
+        
         offy = offy + th*1.4 + spacing
 
         //Container Box
@@ -64,8 +64,8 @@ function ENT:Draw()
         draw.RoundedBox(20, w*.06, offy, w*.88, 40, ogl_vault.config.primaryCol)
 
         surface.SetDrawColor(ogl_vault.config.iconCol)
-		surface.SetMaterial(securityMat)
-		surface.DrawTexturedRect(w*.06+40, offy+sh*.55-10, 100, 100)
+        surface.SetMaterial(securityMat)
+        surface.DrawTexturedRect(w*.06+40, offy+sh*.55-10, 100, 100)
 
         draw.SimpleText(ogl_vault.lang.securitysystem, "OGLBankSmallTitle", w*.06+40+100+30, offy+sh*.55+40, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText(security and ogl_vault.lang.enabled or ogl_vault.lang.disabled, "OGLBankSmallTitle", w*.06+w*.88-40, offy+sh*.55+40, security and ogl_vault.config.onCol or ogl_vault.config.offCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
@@ -80,11 +80,11 @@ function ENT:Draw()
         tmw = tmh + 5 + tmw
 
         surface.SetDrawColor(ogl_vault.config.warningCol)
-		surface.SetMaterial(timerMat)
-		surface.DrawTexturedRect(w*.5-tmw*.5, offy+sh*1.4+msgh+40+tmh*.1, tmh*.8, tmh*.8)
+        surface.SetMaterial(timerMat)
+        surface.DrawTexturedRect(w*.5-tmw*.5, offy+sh*1.4+msgh+40+tmh*.1, tmh*.8, tmh*.8)
 
         draw.SimpleText(timeLeftText, "OGLBankSecurityTime", w*.5+tmw*.5, offy+sh*1.4+msgh+40, ogl_vault.config.warningCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-        	
+            
         draw.RoundedBox(20, w*.06, offy+sh*1.4+msgh+40+sth, w*.88, 40, ogl_vault.config.primaryCol)
 
         offy = offy + sh*1.4 + msgh + 40 + sth + 40 + spacing
@@ -103,7 +103,7 @@ function ENT:Draw()
         draw.RoundedBox(0, w/2-(rw*1.1)/2, offy+40+20, rw*1.1, 18, ogl_vault.config.lineCol)
         draw.SimpleText(statusText, "OGLBankStatus", w*.5, offy+40+20+4+rh*.5, ogl_vault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         draw.RoundedBox(0, w/2-(rw*1.1)/2, offy+40+20+rh-8, rw*1.1, 18, ogl_vault.config.lineCol)
-		
+        
         if state == VAULT_RAIDING or state == VAULT_OPEN then
             surface.SetDrawColor(ogl_vault.config.iconCol)
             surface.SetMaterial(statusMat)
@@ -117,8 +117,8 @@ function ENT:Draw()
         offy = offy + 40 + 20 + rh + 10 + 40
 
         surface.SetDrawColor(color_white)
-		surface.SetMaterial(shadowMat)
-		surface.DrawTexturedRect(0, offy, w, 460)
+        surface.SetMaterial(shadowMat)
+        surface.DrawTexturedRect(0, offy, w, 460)
 
         local progress = state == VAULT_IDLE and 1 or 1-((self:GetTimerEnd() - CurTime()) / self:GetTimerLength())
         progress = math.Clamp(progress, 0, 1)
@@ -133,8 +133,8 @@ function ENT:Draw()
         draw.SimpleText(ogl_vault.lang.info, "OGLBankInfoTitle", w*.06+40, offy, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 
         surface.SetDrawColor(ogl_vault.config.iconCol)
-		surface.SetMaterial(infoMat)
-		surface.DrawTexturedRect(w*.08+w*.84-74, offy+17, 75, 75)
+        surface.SetMaterial(infoMat)
+        surface.DrawTexturedRect(w*.08+w*.84-74, offy+17, 75, 75)
 
         offy = offy + ih
 
@@ -142,29 +142,29 @@ function ENT:Draw()
         draw.RoundedBox(0, w*.55, offy, 18, 740, ogl_vault.config.lineCol)
 
         surface.SetDrawColor(ogl_vault.config.iconCol)
-		surface.SetMaterial(cooldownMat)
-		surface.DrawTexturedRect(w*.06+40, offy+170-110, 100, 100)
+        surface.SetMaterial(cooldownMat)
+        surface.DrawTexturedRect(w*.06+40, offy+170-110, 100, 100)
 
         draw.SimpleText(ogl_vault.lang.cooldown, "OGLBankInfo", w*.06+40+100+20, offy+170-110, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         draw.SimpleText(cooldown and ogl_vault.lang.active or ogl_vault.lang.inactive, "OGLBankInfo", w*.55+18+40, offy+170-110, cooldown and ogl_vault.config.onCol or ogl_vault.config.offCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 
         surface.SetDrawColor(ogl_vault.config.iconCol)
-		surface.SetMaterial(playerMat)
-		surface.DrawTexturedRect(w*.06+40, offy+170*2-110, 100, 100)
+        surface.SetMaterial(playerMat)
+        surface.DrawTexturedRect(w*.06+40, offy+170*2-110, 100, 100)
 
         draw.SimpleText(ogl_vault.lang.players, "OGLBankInfo", w*.06+40+100+20, offy+170*2-110, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         draw.SimpleText(playerCount.."/"..ogl_vault.config.minplayers, "OGLBankInfo", w*.55+18+40, offy+170*2-110, playerCount >= ogl_vault.config.minplayers and ogl_vault.config.onCol or ogl_vault.config.offCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 
         surface.SetDrawColor(ogl_vault.config.iconCol)
-		surface.SetMaterial(valueMat)
-		surface.DrawTexturedRect(w*.06+40, offy+170*3-110, 100, 100)
+        surface.SetMaterial(valueMat)
+        surface.DrawTexturedRect(w*.06+40, offy+170*3-110, 100, 100)
 
         draw.SimpleText(ogl_vault.lang.totalvalue, "OGLBankInfo", w*.06+40+100+20, offy+170*3-110, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         draw.SimpleText(DarkRP.formatMoney(self:GetValue()), "OGLBankInfo", w*.55+18+40, offy+170*3-110, ogl_vault.config.onCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 
         surface.SetDrawColor(ogl_vault.config.iconCol)
-		surface.SetMaterial(lawMat)
-		surface.DrawTexturedRect(w*.06+40, offy+170*4-110, 100, 100)
+        surface.SetMaterial(lawMat)
+        surface.DrawTexturedRect(w*.06+40, offy+170*4-110, 100, 100)
 
         draw.SimpleText(ogl_vault.lang.lawenforcement, "OGLBankInfo", w*.06+40+100+20, offy+170*4-110, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         draw.SimpleText(policeCount.."/"..ogl_vault.config.minpolice, "OGLBankInfo", w*.55+18+40, offy+170*4-110, policeCount >= ogl_vault.config.minpolice and ogl_vault.config.onCol or ogl_vault.config.offCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
@@ -184,45 +184,45 @@ function ENT:Draw()
 
         draw.RoundedBox(20, w*.06, offy+crh*1.4, w*.88, 40, ogl_vault.config.primaryCol)
 
-		surface.SetDrawColor(self.Robbers[1] and ogl_vault.config.onCol or ogl_vault.config.offCol)
-		surface.SetMaterial(circleMat)
-		surface.DrawTexturedRect(w*.06+80, offy+315, 100, 100)
+        surface.SetDrawColor(self.Robbers[1] and ogl_vault.config.onCol or ogl_vault.config.offCol)
+        surface.SetMaterial(circleMat)
+        surface.DrawTexturedRect(w*.06+80, offy+315, 100, 100)
         draw.SimpleText(self.Robbers[1] and self.Robbers[1] or ogl_vault.lang.notapplicable, "OGLBankRobber", w*.06+40+100+70, offy+315+50, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-		surface.SetDrawColor(self.Robbers[2] and ogl_vault.config.onCol or ogl_vault.config.offCol)
-		surface.SetMaterial(circleMat)
-		surface.DrawTexturedRect(w*.06+80, offy+490, 100, 100)
+        surface.SetDrawColor(self.Robbers[2] and ogl_vault.config.onCol or ogl_vault.config.offCol)
+        surface.SetMaterial(circleMat)
+        surface.DrawTexturedRect(w*.06+80, offy+490, 100, 100)
         draw.SimpleText(self.Robbers[2] and self.Robbers[2] or ogl_vault.lang.notapplicable, "OGLBankRobber", w*.06+40+100+70, offy+490+50, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-		surface.SetDrawColor(self.Robbers[3] and ogl_vault.config.onCol or ogl_vault.config.offCol)
-		surface.SetMaterial(circleMat)
-		surface.DrawTexturedRect(w*.06+80, offy+665, 100, 100)
+        surface.SetDrawColor(self.Robbers[3] and ogl_vault.config.onCol or ogl_vault.config.offCol)
+        surface.SetMaterial(circleMat)
+        surface.DrawTexturedRect(w*.06+80, offy+665, 100, 100)
         draw.SimpleText(self.Robbers[3] and self.Robbers[3] or ogl_vault.lang.notapplicable, "OGLBankRobber", w*.06+40+100+70, offy+665+50, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-		surface.SetDrawColor(self.Robbers[4] and ogl_vault.config.onCol or ogl_vault.config.offCol)
-		surface.SetMaterial(circleMat)
-		surface.DrawTexturedRect(w*.06+80, offy+840, 100, 100)
+        surface.SetDrawColor(self.Robbers[4] and ogl_vault.config.onCol or ogl_vault.config.offCol)
+        surface.SetMaterial(circleMat)
+        surface.DrawTexturedRect(w*.06+80, offy+840, 100, 100)
         draw.SimpleText(self.Robbers[4] and self.Robbers[4] or ogl_vault.lang.notapplicable, "OGLBankRobber", w*.06+40+100+70, offy+840+50, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 
-		surface.SetDrawColor(self.Robbers[5] and ogl_vault.config.onCol or ogl_vault.config.offCol)
-		surface.SetMaterial(circleMat)
-		surface.DrawTexturedRect(w*.06+w*.88-1000, offy+315, 100, 100)
+        surface.SetDrawColor(self.Robbers[5] and ogl_vault.config.onCol or ogl_vault.config.offCol)
+        surface.SetMaterial(circleMat)
+        surface.DrawTexturedRect(w*.06+w*.88-1000, offy+315, 100, 100)
         draw.SimpleText(self.Robbers[5] and self.Robbers[5] or ogl_vault.lang.notapplicable, "OGLBankRobber", w*.06+w*.88-1000+100+30, offy+315+50, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-		surface.SetDrawColor(self.Robbers[6] and ogl_vault.config.onCol or ogl_vault.config.offCol)
-		surface.SetMaterial(circleMat)
-		surface.DrawTexturedRect(w*.06+w*.88-1000, offy+490, 100, 100)
+        surface.SetDrawColor(self.Robbers[6] and ogl_vault.config.onCol or ogl_vault.config.offCol)
+        surface.SetMaterial(circleMat)
+        surface.DrawTexturedRect(w*.06+w*.88-1000, offy+490, 100, 100)
         draw.SimpleText(self.Robbers[6] and self.Robbers[6] or ogl_vault.lang.notapplicable, "OGLBankRobber", w*.06+w*.88-1000+100+30, offy+490+50, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         
-		surface.SetDrawColor(self.Robbers[7] and ogl_vault.config.onCol or ogl_vault.config.offCol)
-		surface.SetMaterial(circleMat)
-		surface.DrawTexturedRect(w*.06+w*.88-1000, offy+665, 100, 100)
+        surface.SetDrawColor(self.Robbers[7] and ogl_vault.config.onCol or ogl_vault.config.offCol)
+        surface.SetMaterial(circleMat)
+        surface.DrawTexturedRect(w*.06+w*.88-1000, offy+665, 100, 100)
         draw.SimpleText(self.Robbers[7] and self.Robbers[7] or ogl_vault.lang.notapplicable, "OGLBankRobber", w*.06+w*.88-1000+100+30, offy+665+50, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-		surface.SetDrawColor(self.Robbers[8] and ogl_vault.config.onCol or ogl_vault.config.offCol)
-		surface.SetMaterial(circleMat)
-		surface.DrawTexturedRect(w*.06+w*.88-1000, offy+840, 100, 100)
+        surface.SetDrawColor(self.Robbers[8] and ogl_vault.config.onCol or ogl_vault.config.offCol)
+        surface.SetMaterial(circleMat)
+        surface.DrawTexturedRect(w*.06+w*.88-1000, offy+840, 100, 100)
         draw.SimpleText(self.Robbers[8] and self.Robbers[8] or ogl_vault.lang.notapplicable, "OGLBankRobber", w*.06+w*.88-1000+100+30, offy+840+50, ogl_vault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
         draw.RoundedBox(20, w*.06, offy+(h-100)-offy-spacing-40, w*.88, 40, ogl_vault.config.primaryCol)

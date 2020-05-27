@@ -3,7 +3,7 @@ file.CreateDir("ogl_vault")
 
 local function spawnVaults()
 	if !file.Exists("ogl_vault/" .. game.GetMap() .. ".txt", "DATA") then return end
-	
+
 	local vaults = util.JSONToTable(file.Read("ogl_vault/" .. game.GetMap() .. ".txt", "DATA"))
 	if !vaults then return end
 
