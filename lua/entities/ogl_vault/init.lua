@@ -14,14 +14,6 @@ function ENT:Initialize()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
-
-	self:SetState(VAULT_IDLE)
-	self:SetValue(1500000)
-	self:SetTimerLength(0)
-	self:SetTimerEnd(0)
-	self:SetSecurityTimerEnd(0)
-	self:SetSecurityEnabled(false)
-	self:SetRobberNames("")
 end
 
 function ENT:Think()

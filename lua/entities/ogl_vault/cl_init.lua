@@ -71,6 +71,7 @@ local playerMat = Material("ogl_bank/player.png", "noclamp smooth")
 local valueMat = Material("ogl_bank/money.png", "noclamp smooth")
 local lawMat = Material("ogl_bank/gun.png", "noclamp smooth")
 local circleMat = Material("ogl_bank/circle.png", "noclamp smooth")
+
 local playerCount = 0
 local policeCount = 0
 

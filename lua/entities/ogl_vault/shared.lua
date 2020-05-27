@@ -1,6 +1,6 @@
 
 ENT.Type = "anim"
-ENT.Base = "base_entity"
+ENT.Base = "base_gmodentity"
 ENT.PrintName = "OGL Vault"
 ENT.Category = "OGL Vault"
 ENT.Author = "Tom.bat"
@@ -14,4 +14,14 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Float", 3, "SecurityTimerEnd")
 	self:NetworkVar("Bool", 0, "SecurityEnabled")
 	self:NetworkVar("String", 0, "RobberNames")
+
+    if SERVER then
+        self:SetState(VAULT_IDLE)
+        self:SetValue(1500000)
+        self:SetTimerLength(0)
+        self:SetTimerEnd(0)
+        self:SetSecurityTimerEnd(0)
+        self:SetSecurityEnabled(false)
+        self:SetRobberNames("")
+    end
 end
