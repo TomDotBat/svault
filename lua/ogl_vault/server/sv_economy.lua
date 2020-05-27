@@ -1,0 +1,3 @@
+
+ogl_vault.economymanager = {}
+
