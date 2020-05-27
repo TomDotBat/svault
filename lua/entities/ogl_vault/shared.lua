@@ -5,6 +5,7 @@ ENT.PrintName = "OGL Vault"
 ENT.Category = "OGL Vault"
 ENT.Author = "Tom.bat"
 ENT.Spawnable = true
+ENT.AutomaticFrameAdvance = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar("Int", 0, "State")
