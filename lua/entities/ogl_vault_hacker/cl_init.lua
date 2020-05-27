@@ -1,17 +1,24 @@
 
 include("shared.lua")
 
+ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
+
 function ENT:Initialize()
     self.LocalPlayer = LocalPlayer()
 end
 
-function ENT:Think()
-    self.ShouldDraw3D2D = self.LocalPlayer:GetPos():DistToSqr(self:GetPos()) < ogl_vault.config.draw3d2ddist
-end
-
-function ENT:Draw()
+function ENT:DrawTranslucent()
     self:DrawModel()
 
     if not ogl_vault.lang then return end
-    if not self.ShouldDraw3D2D then return end
+
+    --Use the flippy out screen bone pos/angs?
+    --Or wait for anim to play then animate screen turn on
+
+    if imgui.Entity3D2D(self, Vector(0, 0, 50), Angle(0, 90, 90), 0.06, ogl_vault.config.draw3d2ddist, ogl_vault.config.draw3d2ddist - 40) then
+        surface.SetDrawColor(color_white)
+        surface.DrawRect(0, 0, 100, 100)
+
+        imgui.End3D2D()
+    end
 end
