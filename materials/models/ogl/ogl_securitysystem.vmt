@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/ogl/ogl_securitysystem"
+	"$bumpMap" "models/ogl/ogl_security_bottom_nrm"
+	"$surfaceprop" "metal"
+	$ambientocclusion 1
+}
