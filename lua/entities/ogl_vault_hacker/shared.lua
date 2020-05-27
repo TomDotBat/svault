@@ -5,6 +5,7 @@ ENT.PrintName = "OGL Security Hacking Device"
 ENT.Category = "OGL Vault"
 ENT.Author = "Tom.bat"
 ENT.Spawnable = true
+ENT.AutomaticFrameAdvance = true
 
 function ENT:SetupDataTables()
     self:NetworkVar("Bool", 0, "Opened")
