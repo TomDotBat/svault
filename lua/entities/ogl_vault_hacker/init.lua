@@ -20,6 +20,11 @@ function ENT:SetHacker(ply)
     if self.Setowning_ent then
         self:Setowning_ent(ply)
     end
-    
+
     self:CPPISetOwner(ply)
 end
+
+hook.Add("playerBoughtCustomEntity", "OGLVaultSetHacker", function(ply, enttbl, ent, price)
+    if ent:GetClass() != "ogl_vault_hacker" then return end
+    ent:SetHacker(ply)
+end)
