@@ -15,13 +15,13 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Bool", 0, "SecurityEnabled")
 	self:NetworkVar("String", 0, "RobberNames")
 
-    if SERVER then
-        self:SetState(VAULT_IDLE)
-        self:SetValue(1500000)
-        self:SetTimerLength(0)
-        self:SetTimerEnd(0)
-        self:SetSecurityTimerEnd(0)
-        self:SetSecurityEnabled(false)
-        self:SetRobberNames("")
-    end
+	if SERVER then
+		self:SetState(VAULT_IDLE)
+		self:SetValue(1500000)
+		self:SetTimerLength(0)
+		self:SetTimerEnd(0)
+		self:SetSecurityTimerEnd(0)
+		self:SetSecurityEnabled(false)
+		self:SetRobberNames("")
+	end
 end
