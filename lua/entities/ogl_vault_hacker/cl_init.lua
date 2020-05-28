@@ -1,6 +1,8 @@
 
 include("shared.lua")
 
+local imgui = include("ogl_vault/client/cl_imgui.lua")
+
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 function ENT:Initialize()
