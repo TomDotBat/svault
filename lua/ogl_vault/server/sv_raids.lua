@@ -231,29 +231,28 @@ hook.Add("PlayerDeath", "OGLVaultRaidManager", function(victim, inflictor, attac
         ogl_vault.raidmanager.raids[raidID].leftparticipants[#raid.leftparticipants + 1] = victim
     end
 
-    if raid.stage == RAID_INPROGRESS then
-        if ogl_vault.config.raiderkilledpenalty then
-            raid.vault:SetTimerLength(raid.vault:GetTimerLength() + ogl_vault.config.raiderkilledpenalty)
-            raid.vault:SetTimerEnd(raid.vault:GetTimerEnd() + ogl_vault.config.raiderkilledpenalty)
+    if raid.stage != RAID_INPROGRESS then return end
+    if ogl_vault.config.raiderkilledpenalty then
+        raid.vault:SetTimerLength(raid.vault:GetTimerLength() + ogl_vault.config.raiderkilledpenalty)
+        raid.vault:SetTimerEnd(raid.vault:GetTimerEnd() + ogl_vault.config.raiderkilledpenalty)
 
-            for k,v in ipairs(raid.participants) do
-                v:OGLVaultNotify(ogl_vault.lang.lang.raiderkilledpenalty)
-            end
+        for k,v in ipairs(raid.participants) do
+            v:OGLVaultNotify(ogl_vault.lang.lang.raiderkilledpenalty)
         end
+    end
 
-        if ogl_vault.raidmanager:GetPlayerOngoingRaid(attacker) and ogl_vault.config.friendlykilledpenalty then
-            raid.vault:SetTimerLength(raid.vault:GetTimerLength() + ogl_vault.config.friendlykilledpenalty)
-            raid.vault:SetTimerEnd(raid.vault:GetTimerEnd() + ogl_vault.config.friendlykilledpenalty)
+    if ogl_vault.raidmanager:GetPlayerOngoingRaid(attacker) and ogl_vault.config.friendlykilledpenalty then
+        raid.vault:SetTimerLength(raid.vault:GetTimerLength() + ogl_vault.config.friendlykilledpenalty)
+        raid.vault:SetTimerEnd(raid.vault:GetTimerEnd() + ogl_vault.config.friendlykilledpenalty)
 
-            for k,v in ipairs(raid.participants) do
-                v:OGLVaultNotify(ogl_vault.lang.friendlyfirepenalty)
-            end
+        for k,v in ipairs(raid.participants) do
+            v:OGLVaultNotify(ogl_vault.lang.friendlyfirepenalty)
         end
+    end
 
-        if ogl_vault.config.policeteams[team.GetName(attacker:Team())] and ogl_vault.config.policekillreward then
-            attacker:addMoney(ogl_vault.config.policekillreward)
-            attacker:OGLVaultNotify(string.Replace(ogl_vault.lang.killedraiderreward, "%m", DarkRP.formatMoney(ogl_vault.config.policekillreward)))
-        end
+    if ogl_vault.config.policeteams[team.GetName(attacker:Team())] and ogl_vault.config.policekillreward then
+        attacker:addMoney(ogl_vault.config.policekillreward)
+        attacker:OGLVaultNotify(string.Replace(ogl_vault.lang.killedraiderreward, "%m", DarkRP.formatMoney(ogl_vault.config.policekillreward)))
     end
 end)
 
