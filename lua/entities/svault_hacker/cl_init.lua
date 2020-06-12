@@ -20,7 +20,7 @@ function ENT:DrawTranslucent()
     ang = self:WorldToLocalAngles(ang)
 
     pos = self:WorldToLocal(pos) + ang:Up() * -22.42
-    pos = pos + ang:Forward() * 1.18
+    pos = pos + ang:Forward() * 1.14
     pos = pos + ang:Right() * 5.74
 
     ang:RotateAroundAxis(ang:Right(), 90)
