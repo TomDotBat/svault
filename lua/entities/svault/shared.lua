@@ -1,8 +1,8 @@
 
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
-ENT.PrintName = "OGL Vault"
-ENT.Category = "OGL Vault"
+ENT.PrintName = "Vault"
+ENT.Category = "sVault"
 ENT.Author = "Tom.bat"
 ENT.Spawnable = true
 ENT.AutomaticFrameAdvance = true

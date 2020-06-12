@@ -1,8 +1,8 @@
 
-net.Receive("OGLVaultNotify", function(len)
-	if ogl_vault.config.notifymethod == 1 then
-		chat.AddText(ogl_vault.config.chatPrefixCol, ogl_vault.config.chatprefix, ogl_vault.config.chatMessageCol, " " .. net.ReadString())
-	elseif ogl_vault.config.notifymethod == 2 then
+net.Receive("sVaultNotify", function(len)
+	if svault.config.notifymethod == 1 then
+		chat.AddText(svault.config.chatPrefixCol, svault.config.chatprefix, svault.config.chatMessageCol, " " .. net.ReadString())
+	elseif svault.config.notifymethod == 2 then
 		surface.PlaySound("buttons/button14.wav")
 		notification.AddLegacy(net.ReadString(), NOTIFY_GENERIC, 5)
 	end

@@ -1,13 +1,14 @@
 
 ENT.Type = "anim"
 ENT.Base = "base_gmodentity"
-ENT.PrintName = "OGL Security Hacking Device"
-ENT.Category = "OGL Vault"
+ENT.PrintName = "Security Hacking Device"
+ENT.Category = "sVault"
 ENT.Author = "Tom.bat"
 ENT.Spawnable = true
 ENT.AutomaticFrameAdvance = true
 
 function ENT:SetupDataTables()
+    self:NetworkVar("Entity", 0, "owning_ent")
     self:NetworkVar("Bool", 0, "Opened")
 
     if SERVER then

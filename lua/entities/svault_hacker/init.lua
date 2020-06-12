@@ -29,8 +29,8 @@ function ENT:SetHacker(ply)
     self:CPPISetOwner(ply)
 end
 
-hook.Add("playerBoughtCustomEntity", "OGLVaultSetHacker", function(ply, enttbl, ent, price)
-    if ent:GetClass() != "ogl_vault_hacker" then return end
+hook.Add("playerBoughtCustomEntity", "sVaultSetHacker", function(ply, enttbl, ent, price)
+    if ent:GetClass() != "svault_hacker" then return end
     ent:SetHacker(ply)
 end)
 

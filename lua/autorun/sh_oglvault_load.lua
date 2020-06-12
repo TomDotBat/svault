@@ -1,15 +1,15 @@
 
-local folder = "ogl_vault"
+local folder = "svault"
 
-ogl_vault = ogl_vault or {}
+svault = svault or {}
 
 AddCSLuaFile(folder .. "/config.lua")
 include(folder .. "/config.lua")
 
-if !ogl_vault.config.language then return end
+if !svault.config.language then return end
 
-if file.Exists(folder .. "/lang/" .. ogl_vault.config.language .. ".lua", "LUA") then
-	ogl_vault.lang = include(folder .. "/lang/" .. ogl_vault.config.language .. ".lua")
+if file.Exists(folder .. "/lang/" .. svault.config.language .. ".lua", "LUA") then
+	svault.lang = include(folder .. "/lang/" .. svault.config.language .. ".lua")
 else
 	return
 end
@@ -42,7 +42,7 @@ else
 		end
 	end
 
-	hook.Add("InitPostEntity", "OGLVaultLoadAddon", function() timer.Simple(.5, loadAddon) end)
+	hook.Add("InitPostEntity", "sVaultLoadAddon", function() timer.Simple(.5, loadAddon) end)
 end
 
 VAULT_IDLE, VAULT_WARMUP, VAULT_RAIDING, VAULT_OPEN, VAULT_RECOVERING, VAULT_COOLDOWN = 1, 2, 3, 4, 5, 6

@@ -1,3 +1,3 @@
 
-ogl_vault.economymanager = {}
+svault.economymanager = {}
 

@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
-	self:SetModel("models/ogl/ogl_vault_v2.mdl")
+	self:SetModel("models/ogl/svault_v2.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -19,18 +19,18 @@ end
 function ENT:Think()
 	self:NextThink(CurTime())
 
-	if ogl_vault.config.maxraiderdist then
-		local raidID = ogl_vault.raidmanager:GetVaultRaidID(self)
+	if svault.config.maxraiderdist then
+		local raidID = svault.raidmanager:GetVaultRaidID(self)
 		if !raidID then return true end
-		local raid = ogl_vault.raidmanager.raids[raidID]
+		local raid = svault.raidmanager.raids[raidID]
 
 		local vaultPos = self:GetPos()
 		for k,v in ipairs(raid.participants) do
-			if v:GetPos():DistToSqr(vaultPos) > ogl_vault.config.maxraiderdist then
-				ogl_vault.raidmanager:LeaveRaid(victim, raid.vault)
+			if v:GetPos():DistToSqr(vaultPos) > svault.config.maxraiderdist then
+				svault.raidmanager:LeaveRaid(victim, raid.vault)
 
-				if !ogl_vault.config.rejoinoutofrange then
-					ogl_vault.raidmanager.raids[raidID].leftparticipants[#raid.leftparticipants + 1] = v
+				if !svault.config.rejoinoutofrange then
+					svault.raidmanager.raids[raidID].leftparticipants[#raid.leftparticipants + 1] = v
 				end
 			end
 		end
@@ -40,41 +40,41 @@ function ENT:Think()
 end
 
 function ENT:Use(ply)
-	local raidID = ogl_vault.raidmanager:GetVaultRaidID(self)
+	local raidID = svault.raidmanager:GetVaultRaidID(self)
 	if !raidID then
-		if !self:GetState(VAULT_IDLE) then ply:OGLVaultNotify(ogl_vault.lang.cantstartcooldown) return end
+		if !self:GetState(VAULT_IDLE) then ply:sVaultNotify(svault.lang.cantstartcooldown) return end
 
-		local response = ogl_vault.raidmanager:StartRaid(ply, self)
+		local response = svault.raidmanager:StartRaid(ply, self)
 		if response != "successful" then
-			ply:OGLVaultNotify(response)
+			ply:sVaultNotify(response)
 			return
 		end
 
-		ply:OGLVaultNotify(ogl_vault.lang.startingraid)
+		ply:sVaultNotify(svault.lang.startingraid)
 	else
-		local raid = ogl_vault.raidmanager.raids[raidID]
+		local raid = svault.raidmanager.raids[raidID]
 
-		if raid.stage != RAID_WARMUP then ply:OGLVaultNotify(ogl_vault.lang.cantjoinleavestage) return end
+		if raid.stage != RAID_WARMUP then ply:sVaultNotify(svault.lang.cantjoinleavestage) return end
 
 		for k,v in ipairs(raid.participants) do
 			if v == ply then
-				local response = ogl_vault.raidmanager:LeaveRaid(ply, self)
+				local response = svault.raidmanager:LeaveRaid(ply, self)
 				if response != "successful" then
-					ply:OGLVaultNotify(response)
+					ply:sVaultNotify(response)
 					break
 				end
-				ply:OGLVaultNotify(ogl_vault.lang.leftraid)
+				ply:sVaultNotify(svault.lang.leftraid)
 				break
 			end
 		end
 
-		local response = ogl_vault.raidmanager:JoinRaid(ply, self)
+		local response = svault.raidmanager:JoinRaid(ply, self)
 		if response != "successful" then
-			ply:OGLVaultNotify(response)
+			ply:sVaultNotify(response)
 			return
 		end
 
-		ply:OGLVaultNotify(ogl_vault.lang.joinedraidparty)
+		ply:sVaultNotify(svault.lang.joinedraidparty)
 	end
 end
 
@@ -86,11 +86,11 @@ function ENT:OpenVault()
 	self:ResetSequence(0)
 
 	timer.Simple(self:SequenceDuration(0), function()
-		local raidID = ogl_vault.raidmanager:GetVaultRaidID(self)
+		local raidID = svault.raidmanager:GetVaultRaidID(self)
 		if !raidID then return end
-		local raid = ogl_vault.raidmanager.raids[raidID]
+		local raid = svault.raidmanager.raids[raidID]
 
-		if ogl_vault.config.dropmoney then
+		if svault.config.dropmoney then
 			DarkRP.createMoneyBag(self:LocalToWorld(Vector(-70, 35, 50)), self:GetValue())
 		else
 			local split = self:GetValue() / #raid.participants
@@ -109,11 +109,11 @@ end
 
 function ENT:StartCooldown()
 	self:SetState(VAULT_COOLDOWN)
-	self:SetTimerLength(ogl_vault.config.cooldowntime)
-	self:SetTimerEnd(CurTime() + ogl_vault.config.cooldowntime)	self:SetRobberNames("")
+	self:SetTimerLength(svault.config.cooldowntime)
+	self:SetTimerEnd(CurTime() + svault.config.cooldowntime)	self:SetRobberNames("")
 	self:SetRobberNames("")
 
-	timer.Create("OGLVaultCooldownTimer" .. self:EntIndex(), ogl_vault.config.cooldowntime, 1, function()
+	timer.Create("sVaultCooldownTimer" .. self:EntIndex(), svault.config.cooldowntime, 1, function()
 		self:SetState(VAULT_IDLE)
 		self:SetTimerLength(0)
 		self:SetTimerEnd(0)

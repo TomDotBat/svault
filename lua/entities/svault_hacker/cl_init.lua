@@ -1,7 +1,7 @@
 
 include("shared.lua")
 
-local imgui = include("ogl_vault/client/cl_imgui.lua")
+local imgui = include("svault/client/cl_imgui.lua")
 
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
@@ -13,7 +13,7 @@ local scrw, scrh = 630, 497
 function ENT:DrawTranslucent()
     self:DrawModel()
 
-    if not ogl_vault.lang then return end
+    if not svault.lang then return end
 
     local pos, ang = self:GetBonePosition(1)
 
@@ -26,7 +26,7 @@ function ENT:DrawTranslucent()
     ang:RotateAroundAxis(ang:Right(), 90)
     ang:RotateAroundAxis(ang:Up(), 90)
 
-    if imgui.Entity3D2D(self, pos, ang, 0.04, ogl_vault.config.draw3d2ddist, ogl_vault.config.draw3d2ddist - 40) then
+    if imgui.Entity3D2D(self, pos, ang, 0.04, svault.config.draw3d2ddist, svault.config.draw3d2ddist - 40) then
         surface.SetDrawColor(color_white)
         surface.DrawRect(0, 0, scrw, scrh)
 

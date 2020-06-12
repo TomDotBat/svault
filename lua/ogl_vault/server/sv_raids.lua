@@ -1,11 +1,11 @@
 
-ogl_vault.raidmanager = {}
-ogl_vault.raidmanager.raids = {}
+svault.raidmanager = {}
+svault.raidmanager.raids = {}
 
 local function getPolice(players)
     local police = {}
     for k,v in ipairs(players or player.GetHumans()) do
-        if ogl_vault.config.policeteams[team.GetName(v:Team())] then
+        if svault.config.policeteams[team.GetName(v:Team())] then
             police[#police + 1] = v
         end
     end
@@ -20,8 +20,8 @@ local function concatenateRobbers(participants)
     return string.Left(robbers, #robbers - 1)
 end
 
-function ogl_vault.raidmanager:GetPlayerOngoingRaid(ply)
-    for k,v in ipairs(ogl_vault.raidmanager.raids) do
+function svault.raidmanager:GetPlayerOngoingRaid(ply)
+    for k,v in ipairs(svault.raidmanager.raids) do
         for l,w in ipairs(v.participants) do
             if w == ply then return v end
         end
@@ -29,34 +29,34 @@ function ogl_vault.raidmanager:GetPlayerOngoingRaid(ply)
     return false
 end
 
-function ogl_vault.raidmanager:GetVaultRaidID(vault)
-    for k,v in ipairs(ogl_vault.raidmanager.raids) do
+function svault.raidmanager:GetVaultRaidID(vault)
+    for k,v in ipairs(svault.raidmanager.raids) do
         if v.vault == vault then return k end
     end
 
     return false
 end
 
-function ogl_vault.raidmanager:StartRaid(ply, vault)
-    if vault:GetState() != VAULT_IDLE then return ogl_vault.lang.cantstartcooldown end
+function svault.raidmanager:StartRaid(ply, vault)
+    if vault:GetState() != VAULT_IDLE then return svault.lang.cantstartcooldown end
 
     local teamName = team.GetName(ply:Team())
-    if ogl_vault.config.canraidteams and !ogl_vault.config.canraidteams[teamName] then return ogl_vault.lang.wrongteam end
+    if svault.config.canraidteams and !svault.config.canraidteams[teamName] then return svault.lang.wrongteam end
 
-    if ogl_vault.config.policeteams[teamName] then return ogl_vault.lang.wrongteam end
+    if svault.config.policeteams[teamName] then return svault.lang.wrongteam end
 
-    if #self.raids > ogl_vault.config.maxraidsongoing then return ogl_vault.lang.toomanyraids end
+    if #self.raids > svault.config.maxraidsongoing then return svault.lang.toomanyraids end
 
     local players = player.GetHumans()
-    if #players < ogl_vault.config.minplayers then return ogl_vault.lang.notenoughplayers end
+    if #players < svault.config.minplayers then return svault.lang.notenoughplayers end
 
     local police = getPolice(players)
-    if #police < ogl_vault.config.minpolice then return ogl_vault.lang.notenoughpolice end
+    if #police < svault.config.minpolice then return svault.lang.notenoughpolice end
 
-    if self:GetPlayerOngoingRaid(ply) then return ogl_vault.lang.alreadytakingpart end
+    if self:GetPlayerOngoingRaid(ply) then return svault.lang.alreadytakingpart end
 
     local raidID = self:GetVaultRaidID(vault)
-    if raidID then return ogl_vault.lang.alreadybeingraided end
+    if raidID then return svault.lang.alreadybeingraided end
 
     local newRaid = {}
     newRaid.stage = RAID_WARMUP
@@ -68,18 +68,18 @@ function ogl_vault.raidmanager:StartRaid(ply, vault)
     self.raids[#self.raids + 1] = newRaid
 
     vault:SetState(VAULT_WARMUP)
-    vault:SetTimerLength(ogl_vault.config.warmuptime)
-    vault:SetTimerEnd(CurTime() + ogl_vault.config.warmuptime)
+    vault:SetTimerLength(svault.config.warmuptime)
+    vault:SetTimerEnd(CurTime() + svault.config.warmuptime)
     vault:SetRobberNames(concatenateRobbers(newRaid.participants))
 
-    timer.Create("OGLVaultTimer" .. vault:EntIndex(), ogl_vault.config.warmuptime, 1, function()
+    timer.Create("sVaultTimer" .. vault:EntIndex(), svault.config.warmuptime, 1, function()
         self:StartRaidTimer(vault)
     end)
 
     return "successful"
 end
 
-function ogl_vault.raidmanager:JoinRaid(ply, vault)
+function svault.raidmanager:JoinRaid(ply, vault)
     local raidID = self:GetVaultRaidID(vault)
     if !raidID then return false end
 
@@ -87,28 +87,28 @@ function ogl_vault.raidmanager:JoinRaid(ply, vault)
 
     if raid.stage != RAID_WARMUP then
         if raid.stage == RAID_INPROGRESS then
-            if 1-((vault:GetTimerEnd() - CurTime()) / vault:GetTimerLength()) < ogl_vault.config.maxprogresstojoin / 100 then
-                return ogl_vault.lang.toolate
+            if 1-((vault:GetTimerEnd() - CurTime()) / vault:GetTimerLength()) < svault.config.maxprogresstojoin / 100 then
+                return svault.lang.toolate
             end
         else
-            return ogl_vault.lang.toolate
+            return svault.lang.toolate
         end
     end
 
     for k,v in ipairs(self.raids[raidID].leftparticipants) do
         if v == ply then
-            return ogl_vault.lang.cantrejoin
+            return svault.lang.cantrejoin
         end
     end
 
-    if #raid.participants >= ogl_vault.config.maxparticipants then return ogl_vault.lang.toomanyraiders end
+    if #raid.participants >= svault.config.maxparticipants then return svault.lang.toomanyraiders end
 
     self.raids[raidID].participants[#raid.participants + 1] = ply
 
     return "successful"
 end
 
-function ogl_vault.raidmanager:LeaveRaid(ply, vault)
+function svault.raidmanager:LeaveRaid(ply, vault)
     local raidID = self:GetVaultRaidID(vault)
     if !raidID then return false end
 
@@ -119,7 +119,7 @@ function ogl_vault.raidmanager:LeaveRaid(ply, vault)
             vault:StartCooldown()
 
             local police = getPolice()
-            local policeReward = self.raids[raidID].memberCount * ogl_vault.config.rewardmembermultiplier
+            local policeReward = self.raids[raidID].memberCount * svault.config.rewardmembermultiplier
             for k,v in ipairs(police) do
                 v:addMoney(math.Round(policeReward / police))
             end
@@ -129,8 +129,8 @@ function ogl_vault.raidmanager:LeaveRaid(ply, vault)
         end
 
         self.raids[raidID] = nil
-        timer.Remove("OGLVaultTimer" .. vault:EntIndex())
-        return ogl_vault.lang.cancelledraid
+        timer.Remove("sVaultTimer" .. vault:EntIndex())
+        return svault.lang.cancelledraid
     end
 
     vault:SetRobberNames(concatenateRobbers(self.raids[raidID].participants))
@@ -138,7 +138,7 @@ function ogl_vault.raidmanager:LeaveRaid(ply, vault)
     return "successful"
 end
 
-function ogl_vault.raidmanager:StartRaidTimer(vault)
+function svault.raidmanager:StartRaidTimer(vault)
     local raidID = self:GetVaultRaidID(vault)
     if !raidID then return false end
     local raid = self.raids[raidID]
@@ -148,114 +148,114 @@ function ogl_vault.raidmanager:StartRaidTimer(vault)
     self.raids[raidID].memberCount = #raid.participants
 
     for k,v in ipairs(raid.participants) do
-        v:OGLVaultNotify(ogl_vault.lang.warmupover)
+        v:sVaultNotify(svault.lang.warmupover)
     end
 
-    local timerLength = ogl_vault.config.raidbasetime + ((#raid.participants - 1) * ogl_vault.config.raidmembertimemultiplier)
+    local timerLength = svault.config.raidbasetime + ((#raid.participants - 1) * svault.config.raidmembertimemultiplier)
 
     vault:SetTimerLength(timerLength)
     vault:SetTimerEnd(CurTime() + timerLength)
 
-    timer.Create("OGLVaultTimer" .. vault:EntIndex(), timerLength, 1, function()
+    timer.Create("sVaultTimer" .. vault:EntIndex(), timerLength, 1, function()
         self:EndRaidTimer(vault)
     end)
 
     if vault:GetSecurityEnabled() then
         self:TriggerSecurity(vault)
     else
-        vault:SetSecurityTimerEnd(CurTime() + ogl_vault.config.securitytimer)
-        timer.Create("OGLVaultSecurityTimer" .. vault:EntIndex(), timerLength, 1, function()
+        vault:SetSecurityTimerEnd(CurTime() + svault.config.securitytimer)
+        timer.Create("sVaultSecurityTimer" .. vault:EntIndex(), timerLength, 1, function()
             self:TriggerSecurity(vault)
         end)
     end
 end
 
-function ogl_vault.raidmanager:TriggerSecurity(vault)
+function svault.raidmanager:TriggerSecurity(vault)
     vault:SetSecurityEnabled(true)
-    vault:SetSecurityTimerEnd(CurTime() + ogl_vault.config.securitytimer)
+    vault:SetSecurityTimerEnd(CurTime() + svault.config.securitytimer)
 
     for k,v in ipairs(getPolice()) do
-        v:OGLVaultNotify(ogl_vault.lang.vaultbreached)
+        v:sVaultNotify(svault.lang.vaultbreached)
     end
 end
 
-function ogl_vault.raidmanager:EndRaidTimer(vault)
+function svault.raidmanager:EndRaidTimer(vault)
     vault:OpenVault()
 end
 
-hook.Add("PlayerDisconnected", "OGLVaultRaidManager", function(ply)
-    local raid = ogl_vault.raidmanager:GetPlayerOngoingRaid(ply)
+hook.Add("PlayerDisconnected", "sVaultRaidManager", function(ply)
+    local raid = svault.raidmanager:GetPlayerOngoingRaid(ply)
     if !raid then return end
 
-    ogl_vault.raidmanager:LeaveRaid(ply, raid.vault)
+    svault.raidmanager:LeaveRaid(ply, raid.vault)
 end)
 
-hook.Add("playerCanChangeTeam", "OGLVaultRaidManager", function(ply, newTeam, force)
-    local raid = ogl_vault.raidmanager:GetPlayerOngoingRaid(ply)
+hook.Add("playerCanChangeTeam", "sVaultRaidManager", function(ply, newTeam, force)
+    local raid = svault.raidmanager:GetPlayerOngoingRaid(ply)
     if !raid then return end
 
-    if force then ogl_vault.raidmanager:LeaveRaid(ply, raid.vault) return end
+    if force then svault.raidmanager:LeaveRaid(ply, raid.vault) return end
 
-    return false, ogl_vault.lang.cantchangeteam
+    return false, svault.lang.cantchangeteam
 end)
 
-hook.Add("canStartVote", "OGLVaultRaidManager", function(vote)
+hook.Add("canStartVote", "sVaultRaidManager", function(vote)
     local ply = vote.target
-    local raid = ogl_vault.raidmanager:GetPlayerOngoingRaid(ply)
-    if raid then return false, nil, ogl_vault.lang.cantstartvote end
+    local raid = svault.raidmanager:GetPlayerOngoingRaid(ply)
+    if raid then return false, nil, svault.lang.cantstartvote end
 end)
 
-hook.Add("canGoAFK", "OGLVaultRaidManager", function(ply, state)
+hook.Add("canGoAFK", "sVaultRaidManager", function(ply, state)
     if !state then return end
 
-    local raid = ogl_vault.raidmanager:GetPlayerOngoingRaid(ply)
+    local raid = svault.raidmanager:GetPlayerOngoingRaid(ply)
     if raid then return false end
 end)
 
-hook.Add("canSleep", "OGLVaultRaidManager", function(ply, force)
-    local raid = ogl_vault.raidmanager:GetPlayerOngoingRaid(ply)
+hook.Add("canSleep", "sVaultRaidManager", function(ply, force)
+    local raid = svault.raidmanager:GetPlayerOngoingRaid(ply)
     if !raid then return end
 
-    if force then ogl_vault.raidmanager:LeaveRaid(ply, raid.vault) return end
+    if force then svault.raidmanager:LeaveRaid(ply, raid.vault) return end
 
-    return false, ogl_vault.lang.cantsleep
+    return false, svault.lang.cantsleep
 end)
 
-hook.Add("PlayerDeath", "OGLVaultRaidManager", function(victim, inflictor, attacker)
-    local raid = ogl_vault.raidmanager:GetPlayerOngoingRaid(victim)
+hook.Add("PlayerDeath", "sVaultRaidManager", function(victim, inflictor, attacker)
+    local raid = svault.raidmanager:GetPlayerOngoingRaid(victim)
     if !raid then return end
 
-    ogl_vault.raidmanager:LeaveRaid(victim, raid.vault)
+    svault.raidmanager:LeaveRaid(victim, raid.vault)
 
-    if !ogl_vault.config.rejoindeath then
-        ogl_vault.raidmanager.raids[raidID].leftparticipants[#raid.leftparticipants + 1] = victim
+    if !svault.config.rejoindeath then
+        svault.raidmanager.raids[raidID].leftparticipants[#raid.leftparticipants + 1] = victim
     end
 
     if raid.stage != RAID_INPROGRESS then return end
-    if ogl_vault.config.raiderkilledpenalty then
-        raid.vault:SetTimerLength(raid.vault:GetTimerLength() + ogl_vault.config.raiderkilledpenalty)
-        raid.vault:SetTimerEnd(raid.vault:GetTimerEnd() + ogl_vault.config.raiderkilledpenalty)
+    if svault.config.raiderkilledpenalty then
+        raid.vault:SetTimerLength(raid.vault:GetTimerLength() + svault.config.raiderkilledpenalty)
+        raid.vault:SetTimerEnd(raid.vault:GetTimerEnd() + svault.config.raiderkilledpenalty)
 
         for k,v in ipairs(raid.participants) do
-            v:OGLVaultNotify(ogl_vault.lang.lang.raiderkilledpenalty)
+            v:sVaultNotify(svault.lang.lang.raiderkilledpenalty)
         end
     end
 
-    if ogl_vault.raidmanager:GetPlayerOngoingRaid(attacker) and ogl_vault.config.friendlykilledpenalty then
-        raid.vault:SetTimerLength(raid.vault:GetTimerLength() + ogl_vault.config.friendlykilledpenalty)
-        raid.vault:SetTimerEnd(raid.vault:GetTimerEnd() + ogl_vault.config.friendlykilledpenalty)
+    if svault.raidmanager:GetPlayerOngoingRaid(attacker) and svault.config.friendlykilledpenalty then
+        raid.vault:SetTimerLength(raid.vault:GetTimerLength() + svault.config.friendlykilledpenalty)
+        raid.vault:SetTimerEnd(raid.vault:GetTimerEnd() + svault.config.friendlykilledpenalty)
 
         for k,v in ipairs(raid.participants) do
-            v:OGLVaultNotify(ogl_vault.lang.friendlyfirepenalty)
+            v:sVaultNotify(svault.lang.friendlyfirepenalty)
         end
     end
 
-    if ogl_vault.config.policeteams[team.GetName(attacker:Team())] and ogl_vault.config.policekillreward then
-        attacker:addMoney(ogl_vault.config.policekillreward)
-        attacker:OGLVaultNotify(string.Replace(ogl_vault.lang.killedraiderreward, "%m", DarkRP.formatMoney(ogl_vault.config.policekillreward)))
+    if svault.config.policeteams[team.GetName(attacker:Team())] and svault.config.policekillreward then
+        attacker:addMoney(svault.config.policekillreward)
+        attacker:sVaultNotify(string.Replace(svault.lang.killedraiderreward, "%m", DarkRP.formatMoney(svault.config.policekillreward)))
     end
 end)
 
-hook.Add("PostCleanupMap", "OGLVaultRaidManager", function()
-    table.Empty(ogl_vault.raidmanager.raids)
+hook.Add("PostCleanupMap", "sVaultRaidManager", function()
+    table.Empty(svault.raidmanager.raids)
 end)
