@@ -50,6 +50,10 @@ svault.config.rewardmembermultiplier = 2000 --How much extra should the police g
 
 svault.config.dropmoney = false --Should we drop the money in front of the bank instead of giving the split to players directly?
 
+svault.config.hackerselfdestructtime = 10 --How many seconds after a successful hack should it take for the hacker to self destruct?
+svault.config.hackerexplosiondamage = true --Should the hacker cause explosion damage to nearby players on self destruct?
+svault.config.hackerminhacktime = 5 --The minimum time it should take for someone to hack the security system
+
 svault.config.draw3d2ddist = 690 --What should be the maximum distance from the vault that you can see the 3D2D at?
 
 svault.config.preventphysgun = true --Should we prevent permanent vaults from being physgunned?
@@ -86,7 +90,8 @@ svault.config.hackerGradientCol = Color(0, 0, 0)
 svault.config.hackerSelectorCol = Color(255, 255, 255)
 svault.config.hackerLetterCol = Color(255, 255, 255)
 svault.config.hackerLetterCorrectCol = Color(255, 0, 0)
-
+svault.config.hackerFinishTextCol = Color(255, 255, 255)
+svault.config.hackerFinishStandBackCol = Color(255, 0, 0)
 
 --[[-------------------------------------------------------------------------
 End of sVault Configuration
