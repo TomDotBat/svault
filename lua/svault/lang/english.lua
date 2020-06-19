@@ -46,5 +46,8 @@ lang.cantjoinleavestage = "You can't join or leave the raid as of right now."
 lang.cantrejoin = "You're not allowed to rejoin this raid."
 lang.warmupover = "The warmup period has ended, defend the vault to open it."
 lang.vaultbreached = "A vault's security has been breached, please investigate."
+lang.securitydisabled = "SECURITY DISABLED"
+lang.destroyingevidence = "DESTROYING EVIDENCE IN %s"
+lang.standback = "PLEASE STAND BACK"
 
 return lang
