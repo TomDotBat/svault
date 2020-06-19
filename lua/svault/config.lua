@@ -64,21 +64,29 @@ svault.config.useworkshopdl = false --Should the content be added to force downl
 --[[-------------------------------------------------------------------------
 Colour Settings
 ---------------------------------------------------------------------------]]
-svault.config.chatPrefixCol = Color(215, 80, 80) --Chat prefix colour
-svault.config.chatMessageCol = Color(255, 255, 255) --Chat message colour
+svault.config.chatPrefixCol = Color(215, 80, 80)
+svault.config.chatMessageCol = Color(255, 255, 255)
 
-svault.config.primaryCol = Color(194, 51, 51) --3D2D primary color
-svault.config.bgCol = Color(64, 64, 64) --3D2D background color
-svault.config.secondBgCol = Color(88, 88, 88) --3D2D secondary background color
-svault.config.boxBgCol = Color(58, 58, 58) --3D2D box background color
-svault.config.textCol = Color(255, 255, 255) --3D2D text color
-svault.config.onCol = Color(63, 199, 53) --3D2D on text color
-svault.config.offCol = Color(172, 50, 55) --3D2D off text color
-svault.config.iconCol = Color(255, 255, 255) --3D2D icon color
-svault.config.lineCol = Color(255, 255, 255) --3D2D line color
-svault.config.warningCol = Color(220, 62, 62) --3D2D security system text and icon warning color
-svault.config.progBgCol = Color(68, 68, 68) --3D2D progress bar background color
-svault.config.progCol = Color(236, 59, 59) --3D2D progress bar main color
+svault.config.primaryCol = Color(194, 51, 51)
+svault.config.bgCol = Color(64, 64, 64)
+svault.config.secondBgCol = Color(88, 88, 88)
+svault.config.boxBgCol = Color(58, 58, 58)
+svault.config.textCol = Color(255, 255, 255)
+svault.config.onCol = Color(63, 199, 53)
+svault.config.offCol = Color(172, 50, 55)
+svault.config.iconCol = Color(255, 255, 255)
+svault.config.lineCol = Color(255, 255, 255)
+svault.config.warningCol = Color(220, 62, 62)
+svault.config.progBgCol = Color(68, 68, 68)
+svault.config.progCol = Color(236, 59, 59)
+
+svault.config.hackerBgCol = Color(0, 0, 0)
+svault.config.hackerNameCol = Color(255, 255, 255)
+svault.config.hackerGradientCol = Color(0, 0, 0)
+svault.config.hackerSelectorCol = Color(255, 255, 255)
+svault.config.hackerLetterCol = Color(255, 255, 255)
+svault.config.hackerLetterCorrectCol = Color(255, 0, 0)
+
 
 --[[-------------------------------------------------------------------------
 End of sVault Configuration
