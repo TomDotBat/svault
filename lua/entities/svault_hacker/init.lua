@@ -37,13 +37,20 @@ end)
 function ENT:Use(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
     if ply != self:GetHacker() then return end
+    if self:GetOpened() then return end
 
-    local newState = not self:GetOpened()
-    self:SetOpened(newState)
-
-    if newState then
-        self:ResetSequence(1)
-    else
-        self:ResetSequence(0)
-    end
+    self:SetOpened(true)
+    self:ResetSequence(1)
 end
+
+net.Receive("sVaultHackerPressStart", function(len, ply)
+    local ent = net.ReadEntity()
+    if ent:GetClass() != "svault_hacker" then return end
+    if ent:GetPos():DistToSqr(ply:GetPos()) > 10000 then return end
+    if ent:GetScreenID() != 1 then return end
+    if ent:GetHacker() != ply then return end
+
+    ent:SetScreenID(2)
+end)
+
+util.AddNetworkString("sVaultHackerPressStart")
