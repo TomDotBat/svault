@@ -54,27 +54,28 @@ surface.CreateFont("sVaultHackingStopButton", {
     antialias = true
 })
 
-local columnheight = 11
-
 function ENT:Initialize()
     self.LocalPlayer = LocalPlayer()
+
+    self.TargetWord = ""
+    self.SelectorX = 0
+    self.Letters = {}
+    self.ColumnOffsets = {}
+    self.SelectedColumn = 1
 end
 
-local done = false
-function ENT:Think()
-    if done then return end
-    done = true
-    self.SelectorX = 0
-
-    self.TargetWord = svault.HackingWords[math.random(1, #svault.HackingWords)]
-
+local columnHeight = 11
+local scrollSpeed = 120
+local letterSpacing = 52
+function ENT:GenerateWordGrid(word)
+    self.TargetWord = word
     self.Letters = {}
 
     for i = 1, #self.TargetWord do
-        local letterpos = math.random(1, columnheight)
+        local letterpos = math.random(1, columnHeight)
         self.Letters[i] = {}
 
-        for j = 1, columnheight do
+        for j = 1, columnHeight do
             if j == letterpos then
                 self.Letters[i][j] = self.TargetWord[i]
                 continue
@@ -85,7 +86,6 @@ function ENT:Think()
     end
 
     self.ColumnOffsets = {}
-
     self.SelectedColumn = 1
 end
 
@@ -99,7 +99,14 @@ function ENT:DrawTranslucent()
     self:DrawControls()
 end
 
+local done = false
 function ENT:DrawScreen()
+    if not done then
+        done = true
+
+        self:GenerateWordGrid(svault.HackingWords[math.random(1, #svault.HackingWords)])
+    end
+
     local pos, ang = self:GetBonePosition(1)
 
     ang = self:WorldToLocalAngles(ang)
@@ -124,9 +131,6 @@ local gradientDownMat = Material("gui/gradient_down", "noclamp smooth")
 local gradientUpMat = Material("gui/gradient_up", "noclamp smooth")
 
 local w, h = 630, 497
-
-local scrollspeed = 120
-local spacing = 52
 
 local function startCutOut(drawMask)
     render.ClearStencil()
@@ -221,23 +225,23 @@ ENT.Screens = {
         surface.SetDrawColor(svault.config.hackerBgCol) --BG
         surface.DrawRect(0, 0, w, h)
 
-        local rowTall = columnheight * spacing
+        local rowTall = columnHeight * letterSpacing
         for columnId, column in ipairs(self.Letters) do --This is where we draw the meaty part of the minigame
             if not self.ColumnOffsets[columnId] then self.ColumnOffsets[columnId] = 0 end
 
             for letterId, letter in ipairs(column) do
                 local col = letter == self.TargetWord[columnId] and svault.config.hackerLetterCorrectCol or svault.config.hackerLetterCol
 
-                local letterY = letterId * spacing + self.ColumnOffsets[columnId]
+                local letterY = letterId * letterSpacing + self.ColumnOffsets[columnId]
                 if letterY > rowTall then
                     letterY = letterY - rowTall
                 end
 
-                draw.SimpleText(letter, "sVaultHackingLetters", columnId * spacing - 24, letterY - 63, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(letter, "sVaultHackingLetters", columnId * letterSpacing - 24, letterY - 63, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             end
 
             if columnId == self.SelectedColumn then
-                self.ColumnOffsets[columnId] = self.ColumnOffsets[columnId] + FrameTime() * scrollspeed
+                self.ColumnOffsets[columnId] = self.ColumnOffsets[columnId] + FrameTime() * scrollSpeed
 
                 if self.ColumnOffsets[columnId] >= rowTall then
                     self.ColumnOffsets[columnId] = 0
@@ -252,7 +256,7 @@ ENT.Screens = {
         surface.DrawRect(0, selectorY, w, selectorW) --Top Horizontal Bar
         surface.DrawRect(0, selectorY + selectorsH - selectorW, w, selectorW) --Bottom Horizontal Bar
 
-        self.SelectorX = Lerp(FrameTime() * 5, self.SelectorX, 3)
+        self.SelectorX = Lerp(FrameTime() * 5, self.SelectorX, 3 + (self.SelectedColumn - 1) * 52)
 
         local selectorX = self.SelectorX
         surface.DrawRect(selectorX, 0, selectorW, h) --Left Selector Bar
@@ -304,12 +308,45 @@ function ENT:DrawControls()
             return
         end
 
-
         local btnSize = controlH * .35
         local btnX, btnY = controlW * .5 - btnSize * .5, controlH * .65 - btnSize * .5
 
         if imgui.IsHovering(btnX, btnY, btnSize, btnSize) then
             surface.SetDrawColor(svault.config.hackerButtonHoverCol)
+
+            if imgui.IsPressed() then
+                if self.LocalPlayer != self:GetHacker() then imgui.End3D2D() return end
+
+                local selectedOffset = self.ColumnOffsets[self.SelectedColumn]
+                if not selectedOffset then imgui.End3D2D() return end
+
+                self.ColumnOffsets[self.SelectedColumn] = math.floor(selectedOffset / letterSpacing + 0.5) * letterSpacing
+
+                local rowTall = columnHeight * letterSpacing
+                local selectedChar
+                for k,v in ipairs(self.Letters[self.SelectedColumn]) do
+                    local letterY = k * letterSpacing + selectedOffset
+                    if letterY > rowTall then
+                        letterY = letterY - rowTall
+                    end
+
+                    letterY = letterY - 63
+
+                    if letterY < 221.65 or letterY > 273.35 then continue end --Check if we're within the bounds of the two bars
+                    selectedChar = v
+                    break
+                end
+
+                if not selectedChar then imgui.End3D2D() return end
+
+                if selectedChar != self.TargetWord[self.SelectedColumn] then
+                    self:GenerateWordGrid(self.TargetWord)
+                    imgui.End3D2D()
+                    return
+                end
+
+                self.SelectedColumn = self.SelectedColumn + 1
+            end
         else
             surface.SetDrawColor(svault.config.hackerButtonCol)
         end
