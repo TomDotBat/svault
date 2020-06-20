@@ -288,13 +288,6 @@ ENT.Screens = {
     end
 }
 
-svault.lang.hackerinstructions = [[SECURITY SMASHER v2.0 INSTRUCTIONS
--------------------------------------------------
-1: Place this device near a bank vault.
-2: Boot up the device and press start.
-3: Complete the hacking proccess by finding the correct word in the scrambler
-4: Dispose of the device safely.]]
-
 local circleMat = Material("svault/circle.png", "noclamp smooth")
 
 local controlW, controlH = 587, 468
