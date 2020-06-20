@@ -35,8 +35,6 @@ hook.Add("playerBoughtCustomEntity", "sVaultSetHacker", function(ply, enttbl, en
 end)
 
 function ENT:Use(ply)
-    self:SelfDestruct(true)
-
     if not IsValid(ply) or not ply:IsPlayer() then return end
     if ply != self:GetHacker() then return end
     if self:GetOpened() then return end
@@ -60,10 +58,15 @@ function ENT:SelfDestruct(skipTimer)
     effectdata:SetOrigin(pos)
     util.Effect("HelicopterMegaBomb", effectdata, false, true)
 
+    self:EmitSound("BaseExplosionEffect.Sound")
+
     util.ScreenShake(pos, 2, 3, .5, 500)
 
-    if not svault.config.hackerexplosiondamage then return end
-    util.BlastDamage(self, self, pos, 90, 10)
+    if svault.config.hackerexplosiondamage then
+        util.BlastDamage(self, self, pos, 90, 10)
+    end
+
+    SafeRemoveEntity(self)
 end
 
 net.Receive("sVaultHackerPressStart", function(len, ply)
