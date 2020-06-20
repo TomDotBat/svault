@@ -40,6 +40,13 @@ surface.CreateFont("sVaultHackingFinishLarge", {
     antialias = true
 })
 
+surface.CreateFont("sVaultHackingStopButton", {
+    font = "Arial",
+    size = 100,
+    weight = 700,
+    antialias = true
+})
+
 local columnheight = 11
 
 function ENT:Initialize()
@@ -140,25 +147,29 @@ local hackerName = [[ $$$$$$\  $$$$$$$$\  $$$$$$\  $$\   $$\ $$$$$$$\  $$$$$$\ $
 $$  __$$\ $$  _____|$$  __$$\ $$ |  $$ |$$  __$$\ \_$$  _|\__$$  __|\$$\   $$  |
 $$ /  \__|$$ |      $$ /  \__|$$ |  $$ |$$ |  $$ |  $$ |     $$ |    \$$\ $$  / 
 \$$$$$$\  $$$$$\    $$ |      $$ |  $$ |$$$$$$$  |  $$ |     $$ |     \$$$$  /  
- \____$$\ $$  __|   $$ |      $$ |  $$ |$$  __$$<   $$ |     $$ |      \$$  /   
+\____$$\ $$  __|   $$ |      $$ |  $$ |$$  __$$<   $$ |     $$ |      \$$  /   
 $$\   $$ |$$ |      $$ |  $$\ $$ |  $$ |$$ |  $$ |  $$ |     $$ |       $$ |    
 \$$$$$$  |$$$$$$$$\ \$$$$$$  |\$$$$$$  |$$ |  $$ |$$$$$$\    $$ |       $$ |    
- \______/ \________| \______/  \______/ \__|  \__|\______|   \__|       \__|    
+\______/ \________| \______/  \______/ \__|  \__|\______|   \__|       \__|    
                                                                                 
                                                                                 
                                                                                 
-      $$$$$$\  $$\      $$\  $$$$$$\   $$$$$$\  $$\   $$\ $$$$$$$$\ $$$$$$$\         
-     $$  __$$\ $$$\    $$$ |$$  __$$\ $$  __$$\ $$ |  $$ |$$  _____|$$  __$$\        
-     $$ /  \__|$$$$\  $$$$ |$$ /  $$ |$$ /  \__|$$ |  $$ |$$ |      $$ |  $$ |       
-     \$$$$$$\  $$\$$\$$ $$ |$$$$$$$$ |\$$$$$$\  $$$$$$$$ |$$$$$\    $$$$$$$  |       
-      \____$$\ $$ \$$$  $$ |$$  __$$ | \____$$\ $$  __$$ |$$  __|   $$  __$$<        
-     $$\   $$ |$$ |\$  /$$ |$$ |  $$ |$$\   $$ |$$ |  $$ |$$ |      $$ |  $$ |       
-     \$$$$$$  |$$ | \_/ $$ |$$ |  $$ |\$$$$$$  |$$ |  $$ |$$$$$$$$\ $$ |  $$ |       
-      \______/ \__|     \__|\__|  \__| \______/ \__|  \__|\________|\__|  \__|       ]]
+    $$$$$$\  $$\      $$\  $$$$$$\   $$$$$$\  $$\   $$\ $$$$$$$$\ $$$$$$$\         
+    $$  __$$\ $$$\    $$$ |$$  __$$\ $$  __$$\ $$ |  $$ |$$  _____|$$  __$$\        
+    $$ /  \__|$$$$\  $$$$ |$$ /  $$ |$$ /  \__|$$ |  $$ |$$ |      $$ |  $$ |       
+    \$$$$$$\  $$\$$\$$ $$ |$$$$$$$$ |\$$$$$$\  $$$$$$$$ |$$$$$\    $$$$$$$  |       
+    \____$$\ $$ \$$$  $$ |$$  __$$ | \____$$\ $$  __$$ |$$  __|   $$  __$$<        
+    $$\   $$ |$$ |\$  /$$ |$$ |  $$ |$$\   $$ |$$ |  $$ |$$ |      $$ |  $$ |       
+    \$$$$$$  |$$ | \_/ $$ |$$ |  $$ |\$$$$$$  |$$ |  $$ |$$$$$$$$\ $$ |  $$ |       
+    \______/ \__|     \__|\__|  \__| \______/ \__|  \__|\________|\__|  \__|       ]]
 
 
-local hackerButton = [[╔═══════╗
+local menuStartButton = [[╔═══════╗
 ║  START  ║
+╚═══════╝]]
+
+local menuCloseButton = [[╔═══════╗
+║  CLOSE  ║
 ╚═══════╝]]
 
 ENT.Screens = {
@@ -173,14 +184,24 @@ ENT.Screens = {
         draw.DrawText(hackerName, "sVaultHackingName", w * .5, nameY, svault.config.hackerNameCol, TEXT_ALIGN_CENTER) --Draw that really lit name bro
 
         surface.SetFont("sVaultHackingButton")
-        local btnW, btnH = surface.GetTextSize(hackerButton)
-        local btnX, btnY = w * .5 - btnW * .5, h * .5 - btnH * .5 + 165
+        local startBtnW, btnH = surface.GetTextSize(menuStartButton)
+        local closeBtnW = surface.GetTextSize(menuCloseButton)
+        local btnsW = startBtnW + closeBtnW + 80
+        local startBtnX, btnY = w * .5 - btnsW * .5, h * .5 - btnH * .5 + 165
+        local closeBtnX = startBtnX + btnsW - closeBtnW
 
-        draw.DrawText(hackerButton, "sVaultHackingButton", btnX, btnY, HSVToColor((CurTime() * 20) % 360, 1, 1)) --Draw the button
+        draw.DrawText(menuStartButton, "sVaultHackingButton", startBtnX, btnY, HSVToColor((CurTime() * 20) % 360, 1, 1)) --Start Button
+        draw.DrawText(menuCloseButton, "sVaultHackingButton", closeBtnX, btnY, HSVToColor((CurTime() * 20) % 360, 1, 1)) --Close Button
 
-        if imgui.IsPressed() and imgui.IsHovering(btnX, btnY, btnW, btnH) then
+        if not imgui.IsPressed() then return end
+
+        if imgui.IsHovering(startBtnX, btnY, startBtnW, btnH) then
             net.Start("sVaultHackerPressStart")
-             net.WriteEntity(self)
+            net.WriteEntity(self)
+            net.SendToServer()
+        elseif imgui.IsHovering(closeBtnX, btnY, closeBtnW, btnH) then
+            net.Start("sVaultHackerPressClose")
+            net.WriteEntity(self)
             net.SendToServer()
         end
     end,
@@ -254,20 +275,37 @@ ENT.Screens = {
         textH = textH + select(2, surface.GetTextSize(svault.lang.standback)) + 30
 
         local textY = h * .5 - textH * .5
-
         draw.SimpleText(svault.lang.securitydisabled, "sVaultHackingFinishLarge", w * .5, textY, svault.config.hackerFinishTextCol, TEXT_ALIGN_CENTER)
         draw.SimpleText(evidenceText, "sVaultHackingFinishSmall", w * .5, textY + textH / 2 + 10, svault.config.hackerFinishTextCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         draw.SimpleText(svault.lang.standback, "sVaultHackingFinishSmall", w * .5, textY + textH, ColorAlpha(svault.config.hackerFinishStandBackCol, math.abs(math.sin(CurTime() * 2)) * 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
     end
 }
 
+local function outlinedBox(x, y, boxW, boxH, thickness)
+    for i = 0, thickness - 1 do
+        surface.DrawOutlinedRect(x + i, y + i, boxW - i * 2, boxH - i * 2)
+    end
+end
+
 local controlW, controlH = 587, 468
 local controlPos = Vector(-9.35, -11.73, 5.73)
 local controlAng = Angle(0, 90, 0)
 function ENT:DrawControls()
+    if self:GetScreenID() != 2 then return end
+
     if imgui.Entity3D2D(self, controlPos, controlAng, 0.04, svault.config.draw3d2ddist, svault.config.draw3d2ddist - 40) then
-        draw.RoundedBox(0, 0, 0, controlW, controlH, color_white)
-        draw.SimpleText("svault.lang.securitydisabled", "sVaultHackingFinishLarge", 0, 0, color_black)
+        draw.RoundedBox(0, 0, 0, controlW, controlH, svault.config.hackerControlBgCol)
+
+        local btnW, btnH = controlW * .8, controlH * .5
+        local btnX, btnY = controlW * .5 - btnW * .5, controlH * .5 - btnH * .5
+
+        local col = imgui.IsHovering(btnX, btnY, btnW, btnH) and svault.config.hackerButtonHoverCol or svault.config.hackerButtonCol
+
+        surface.SetDrawColor(col)
+
+        outlinedBox(btnX, btnY, btnW, btnH, 10)
+
+        draw.SimpleText("STOP", "sVaultHackingStopButton", btnX + btnW * .5, btnY + btnH * .5, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
         imgui.End3D2D()
     end
