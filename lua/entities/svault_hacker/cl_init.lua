@@ -26,6 +26,20 @@ surface.CreateFont("sVaultHackingLetters", {
     antialias = true
 })
 
+surface.CreateFont("sVaultHackingFinishSmall", {
+    font = "Consolas",
+    size = 38,
+    weight = 500,
+    antialias = true
+})
+
+surface.CreateFont("sVaultHackingFinishLarge", {
+    font = "Consolas",
+    size = 64,
+    weight = 700,
+    antialias = true
+})
+
 local columnheight = 11
 
 function ENT:Initialize()
@@ -226,7 +240,7 @@ ENT.Screens = {
 
         finishCutOut()
     end,
-    [3] = function(self)
+    [2] = function(self)
         surface.SetDrawColor(svault.config.hackerBgCol) --BG
         surface.DrawRect(0, 0, w, h)
 
@@ -234,5 +248,18 @@ ENT.Screens = {
         --Destroying evidence, in 10s
         --please stand back
 
+        surface.SetFont("sVaultHackingFinishLarge")
+        local textH = select(2, surface.GetTextSize(svault.lang.securitydisabled))
+
+        surface.SetFont("sVaultHackingFinishSmall")
+        local evidenceText = string.Replace(svault.lang.destroyingevidence, "%s", string.format("%.2f", self:GetSelfDestructTime() - CurTime()) .. "s")
+        textH = textH + select(2, surface.GetTextSize(evidenceText))
+        textH = textH + select(2, surface.GetTextSize(svault.lang.standback)) + 30
+
+        local textY = h * .5 - textH * .5
+
+        draw.SimpleText(svault.lang.securitydisabled, "sVaultHackingFinishLarge", w * .5, textY, svault.config.hackerFinishTextCol, TEXT_ALIGN_CENTER)
+        draw.SimpleText(evidenceText, "sVaultHackingFinishSmall", w * .5, textY + textH / 2 + 10, svault.config.hackerFinishTextCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText(svault.lang.standback, "sVaultHackingFinishSmall", w * .5, textY + textH, ColorAlpha(svault.config.hackerFinishStandBackCol, math.abs(math.sin(CurTime() * 2)) * 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
     end
 }
