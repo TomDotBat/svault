@@ -20,8 +20,10 @@ svault.config.notifymethod = 1 --The method used to notify the player 1 = Chat, 
 
 svault.config.econonmyupdaterate = 300 --How often should vault balances increase?
 svault.config.econonmyupdateamount = 50000 --How much should get added to the vault on each economy update?
-svault.config.maxvaultvalue = 1000000 --The maximum money a vault can store at one time
 svault.config.glorifiedbankingfees = true --Should we take transaction fees from Glorified Banking and put them into the vault?
+
+svault.config.minvaultvalue = 900000 --The minimum money needed in the vault to start a raid
+svault.config.maxvaultvalue = 1000000 --The maximum money a vault can store at one time
 
 svault.config.policeteams = { --The teams that are classified as law enforcement
 	["Policeman"] = true
