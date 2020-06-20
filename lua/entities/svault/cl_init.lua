@@ -93,7 +93,7 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-    self.ShouldDraw3D2D = self.LocalPlayer:GetPos():DistToSqr(self:GetPos()) < svault.config.draw3d2ddist * svault.config.draw3d2ddist
+    self.ShouldDraw3D2D = self.LocalPlayer:GetPos():DistToSqr(self:GetPos()) < svault.config.draw3d2ddist ^ 2
     local robbers = string.Explode("\n", self:GetRobberNames())
     table.Empty(self.Robbers)
 
