@@ -89,7 +89,6 @@ function ENT:GenerateWordGrid(word)
 end
 
 net.Receive("sVaultHackerSendTargetWord", function()
-    print("asdasd")
     local ent = net.ReadEntity()
     if not IsValid(ent) then return end
     ent:GenerateWordGrid(net.ReadString())
@@ -191,7 +190,7 @@ ENT.Screens = {
         local nameH = select(2, surface.GetTextSize(hackerName))
         local nameY = h * .5 - nameH * .5 + math.sin(CurTime() * 1) * 20 - 60 -- would be kinda hot if we made the text shake on error
 
-        draw.DrawText(hackerName, "sVaultHackingName", w * .5, nameY, svault.config.hackerNameCol, TEXT_ALIGN_CENTER) --Draw that really lit name bro
+        draw.DrawText(hackerName, "sVaultHackingName", self.Stupid and (w * .5 + math.cos(CurTime() * 50) * 10) or w * .5, nameY, svault.config.hackerNameCol, TEXT_ALIGN_CENTER) --Draw that really lit name bro
 
         surface.SetFont("sVaultHackingButton")
         local startBtnW, btnH = surface.GetTextSize(menuStartButton)
@@ -200,18 +199,40 @@ ENT.Screens = {
         local startBtnX, btnY = w * .5 - btnsW * .5, h * .5 - btnH * .5 + 165
         local closeBtnX = startBtnX + btnsW - closeBtnW
 
-        draw.DrawText(menuStartButton, "sVaultHackingButton", startBtnX, btnY, HSVToColor((CurTime() * 20) % 360, 1, 1)) --Start Button
-        draw.DrawText(menuCloseButton, "sVaultHackingButton", closeBtnX, btnY, HSVToColor((CurTime() * 20) % 360, 1, 1)) --Close Button
+        local rainbowCol = HSVToColor((CurTime() * 20) % 360, 1, 1)
+
+        draw.DrawText(menuStartButton, "sVaultHackingButton", startBtnX, btnY, rainbowCol) --Start Button
+        draw.DrawText(menuCloseButton, "sVaultHackingButton", closeBtnX, btnY, rainbowCol) --Close Button
 
         if not imgui.IsPressed() then return end
 
         if imgui.IsHovering(startBtnX, btnY, startBtnW, btnH) then
-            net.Start("sVaultHackerPressStart")
-            net.WriteEntity(self)
-            net.SendToServer()
+            local target
+
+            for k,v in ipairs(ents.FindInSphere(self:GetPos(), svault.config.hackernearbyvaultdist)) do
+                if v:GetClass() != "svault" then continue end
+                if v:GetState() != VAULT_IDLE then continue end
+                target = v
+                break
+            end
+
+            if target then
+                net.Start("sVaultHackerPressStart")
+                 net.WriteEntity(self)
+                 net.WriteEntity(target)
+                net.SendToServer()
+            else
+                notification.AddLegacy(svault.lang.nonearbyvaults, NOTIFY_ERROR, 2)
+
+                self.Stupid = true
+                timer.Simple(.3, function()
+                    if not IsValid(self) then return end
+                    self.Stupid = false
+                end)
+            end
         elseif imgui.IsHovering(closeBtnX, btnY, closeBtnW, btnH) then
             net.Start("sVaultHackerPressClose")
-            net.WriteEntity(self)
+             net.WriteEntity(self)
             net.SendToServer()
         end
     end,
@@ -342,6 +363,13 @@ function ENT:DrawControls()
                     self:GenerateWordGrid(self.TargetWord)
                     imgui.End3D2D()
                     return
+                end
+
+                if self.SelectedColumn >= 12 then
+                    net.Start("sVaultHackerCompleteHack")
+                     net.WriteEntity(self)
+                     net.WriteString(self.TargetWord)
+                    net.SendToServer()
                 end
 
                 self.SelectedColumn = self.SelectedColumn + 1
