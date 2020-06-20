@@ -37,7 +37,7 @@ svault.config.raidbasetime = 30 --What is the minimum time it should take to rai
 svault.config.raidmembertimemultiplier = 10 --How many extra seconds should be added to the timer per extra raid party member?
 svault.config.cooldowntime = 30 --How long should the cooldown last for after an unsuccessful raid?
 
-svault.config.maxraiderdist = 300000 --How far should away can you be from the vault before being removed from the party? False to disable
+svault.config.maxraiderdist = 600 --How far should away can you be from the vault before being removed from the party? False to disable
 
 svault.config.rejoinoutofrange = false --Should a player be allowed to rejoin the raid party (if possible) after going out of range?
 svault.config.rejoindeath = false --Should a player be allowed to rejoin the raid party (if possible) after dying?
@@ -50,6 +50,7 @@ svault.config.rewardmembermultiplier = 2000 --How much extra should the police g
 
 svault.config.dropmoney = false --Should we drop the money in front of the bank instead of giving the split to players directly?
 
+svault.config.hackernearbyvaultdist = 4000 --How far away can a vault be before it's out of the hacker's range?
 svault.config.hackerselfdestructtime = 10 --How many seconds after a successful hack should it take for the hacker to self destruct?
 svault.config.hackerexplosiondamage = true --Should the hacker cause explosion damage to nearby players on self destruct?
 svault.config.hackerscrollspeed = 150 --The speed the letters scroll at in the hacking device
@@ -94,7 +95,7 @@ svault.config.hackerLetterCorrectCol = Color(255, 0, 0)
 svault.config.hackerFinishTextCol = Color(255, 255, 255)
 svault.config.hackerFinishStandBackCol = Color(255, 0, 0)
 
-svault.config.hackerControlBgCol = Color(66, 61, 54, 220)
+svault.config.hackerControlBgCol = Color(66, 61, 54, 180)
 svault.config.hackerInstructionsCol = Color(255, 255, 255)
 svault.config.hackerButtonCol = Color(194, 51, 51)
 svault.config.hackerButtonHoverCol = Color(153, 40, 40)
