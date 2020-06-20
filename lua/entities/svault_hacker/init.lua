@@ -66,6 +66,22 @@ function ENT:SelfDestruct(skipTimer)
     SafeRemoveEntity(self)
 end
 
+local function sendHackWord(ent)
+    local word = svault.GetRandomHackingWord()
+
+    net.Start("sVaultHackerSendTargetWord")
+     net.WriteEntity(ent)
+     net.WriteString(word)
+    net.SendPVS(ent:GetPos())
+
+    net.Start("sVaultHackerSendTargetWord")
+     net.WriteEntity(ent)
+     net.WriteString(word)
+    net.Send(ent:GetHacker())
+
+    return word
+end
+
 net.Receive("sVaultHackerPressStart", function(len, ply)
     local ent = net.ReadEntity()
     if ent:GetClass() != "svault_hacker" then return end
@@ -74,6 +90,8 @@ net.Receive("sVaultHackerPressStart", function(len, ply)
     if ent:GetHacker() != ply then return end
 
     ent:SetScreenID(2)
+    ent.TargetWord = sendHackWord(ent)
+    ent.HackStart = CurTime()
 end)
 
 net.Receive("sVaultHackerPressClose", function(len, ply)
@@ -92,3 +110,4 @@ end)
 
 util.AddNetworkString("sVaultHackerPressStart")
 util.AddNetworkString("sVaultHackerPressClose")
+util.AddNetworkString("sVaultHackerSendTargetWord")

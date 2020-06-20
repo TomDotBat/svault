@@ -65,7 +65,6 @@ function ENT:Initialize()
 end
 
 local columnHeight = 11
-local scrollSpeed = 120
 local letterSpacing = 52
 function ENT:GenerateWordGrid(word)
     self.TargetWord = word
@@ -89,6 +88,13 @@ function ENT:GenerateWordGrid(word)
     self.SelectedColumn = 1
 end
 
+net.Receive("sVaultHackerSendTargetWord", function()
+    print("asdasd")
+    local ent = net.ReadEntity()
+    if not IsValid(ent) then return end
+    ent:GenerateWordGrid(net.ReadString())
+end)
+
 function ENT:DrawTranslucent()
     self:DrawModel()
 
@@ -99,14 +105,7 @@ function ENT:DrawTranslucent()
     self:DrawControls()
 end
 
-local done = false
 function ENT:DrawScreen()
-    if not done then
-        done = true
-
-        self:GenerateWordGrid(svault.HackingWords[math.random(1, #svault.HackingWords)])
-    end
-
     local pos, ang = self:GetBonePosition(1)
 
     ang = self:WorldToLocalAngles(ang)
@@ -241,7 +240,7 @@ ENT.Screens = {
             end
 
             if columnId == self.SelectedColumn then
-                self.ColumnOffsets[columnId] = self.ColumnOffsets[columnId] + FrameTime() * scrollSpeed
+                self.ColumnOffsets[columnId] = self.ColumnOffsets[columnId] + FrameTime() * svault.config.hackerscrollspeed
 
                 if self.ColumnOffsets[columnId] >= rowTall then
                     self.ColumnOffsets[columnId] = 0
