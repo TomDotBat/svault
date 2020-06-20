@@ -23,26 +23,13 @@ if SERVER then
 		AddCSLuaFile(folder .. "/client/" .. v)
 	end
 
-	for k, v in pairs(file.Find(folder .. "/shared/*.lua", "LUA")) do
-		AddCSLuaFile(folder .. "/shared/" .. v)
-		include(folder .. "/shared/" .. v)
-	end
-
 	for k, v in pairs(file.Find(folder .. "/server/*.lua", "LUA")) do
 		include(folder .. "/server/" .. v)
 	end
 else
-	local function loadAddon()
-		for k, v in pairs(file.Find(folder .. "/shared/*.lua", "LUA")) do
-			include(folder .. "/shared/" .. v)
-		end
-
-		for k, v in pairs(file.Find(folder .. "/client/*.lua", "LUA")) do
-			include(folder .. "/client/" .. v)
-		end
+	for k, v in pairs(file.Find(folder .. "/client/*.lua", "LUA")) do
+		include(folder .. "/client/" .. v)
 	end
-
-	hook.Add("InitPostEntity", "sVaultLoadAddon", function() timer.Simple(.5, loadAddon) end)
 end
 
 VAULT_IDLE, VAULT_WARMUP, VAULT_RAIDING, VAULT_OPEN, VAULT_RECOVERING, VAULT_COOLDOWN = 1, 2, 3, 4, 5, 6
