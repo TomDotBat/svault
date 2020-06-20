@@ -21,7 +21,7 @@ function ENT:Think()
 
 	if svault.config.maxraiderdist then
 		local raidID = svault.raidmanager:GetVaultRaidID(self)
-		if !raidID then return true end
+		if not raidID then return true end
 		local raid = svault.raidmanager.raids[raidID]
 
 		local vaultPos = self:GetPos()
@@ -29,7 +29,7 @@ function ENT:Think()
 			if v:GetPos():DistToSqr(vaultPos) > svault.config.maxraiderdist ^ 2 then
 				svault.raidmanager:LeaveRaid(victim, raid.vault)
 
-				if !svault.config.rejoinoutofrange then
+				if not svault.config.rejoinoutofrange then
 					svault.raidmanager.raids[raidID].leftparticipants[#raid.leftparticipants + 1] = v
 				end
 			end
@@ -41,8 +41,8 @@ end
 
 function ENT:Use(ply)
 	local raidID = svault.raidmanager:GetVaultRaidID(self)
-	if !raidID then
-		if !self:GetState(VAULT_IDLE) then ply:sVaultNotify(svault.lang.cantstartcooldown) return end
+	if not raidID then
+		if not self:GetState(VAULT_IDLE) then ply:sVaultNotify(svault.lang.cantstartcooldown) return end
 
 		local response = svault.raidmanager:StartRaid(ply, self)
 		if response != "successful" then
@@ -85,9 +85,11 @@ function ENT:OpenVault()
 
 	self:ResetSequence(0)
 
-	timer.Simple(self:SequenceDuration(0), function()
+	timer.Simple(self:SequenceDuration(0) + 3, function()
+		if not IsValid(self) then return end
+
 		local raidID = svault.raidmanager:GetVaultRaidID(self)
-		if !raidID then return end
+		if not raidID then return end
 		local raid = svault.raidmanager.raids[raidID]
 
 		if svault.config.dropmoney then
@@ -98,13 +100,18 @@ function ENT:OpenVault()
 				v:addMoney(split)
 			end
 		end
-
 		self:SetValue(0)
+
+		timer.Simple(3, function()
+			if not IsValid(self) then return end
+			self:CloseVault()
+		end)
 	end)
 end
 
 function ENT:CloseVault()
-
+	self:ResetSequence(0)
+	self:StartCooldown()
 end
 
 function ENT:HackVault()
