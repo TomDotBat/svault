@@ -82,6 +82,7 @@ function ENT:DrawTranslucent()
     if not self:GetOpened() then return end
 
     self:DrawScreen()
+    self:DrawControls()
 end
 
 function ENT:DrawScreen()
@@ -259,3 +260,15 @@ ENT.Screens = {
         draw.SimpleText(svault.lang.standback, "sVaultHackingFinishSmall", w * .5, textY + textH, ColorAlpha(svault.config.hackerFinishStandBackCol, math.abs(math.sin(CurTime() * 2)) * 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
     end
 }
+
+local controlW, controlH = 587, 468
+local controlPos = Vector(-9.35, -11.73, 5.73)
+local controlAng = Angle(0, 90, 0)
+function ENT:DrawControls()
+    if imgui.Entity3D2D(self, controlPos, controlAng, 0.04, svault.config.draw3d2ddist, svault.config.draw3d2ddist - 40) then
+        draw.RoundedBox(0, 0, 0, controlW, controlH, color_white)
+        draw.SimpleText("svault.lang.securitydisabled", "sVaultHackingFinishLarge", 0, 0, color_black)
+
+        imgui.End3D2D()
+    end
+end
