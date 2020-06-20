@@ -79,4 +79,19 @@ net.Receive("sVaultHackerPressStart", function(len, ply)
     ent:SetScreenID(2)
 end)
 
+net.Receive("sVaultHackerPressClose", function(len, ply)
+    local ent = net.ReadEntity()
+    if ent:GetClass() != "svault_hacker" then return end
+    if ent:GetPos():DistToSqr(ply:GetPos()) > 10000 then return end
+    if ent:GetScreenID() != 1 then return end
+    if ent:GetHacker() != ply then return end
+
+    ent:ResetSequence(0)
+    timer.Simple(1, function() --Turn off the screen once fully closed
+        if not IsValid(ent) then return end
+        ent:SetOpened(false)
+    end)
+end)
+
 util.AddNetworkString("sVaultHackerPressStart")
+util.AddNetworkString("sVaultHackerPressClose")
