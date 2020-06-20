@@ -14,10 +14,15 @@ function ENT:Initialize()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
+
+	self.NextThinkTime = 0
 end
 
 function ENT:Think()
 	self:NextThink(CurTime())
+
+	if self.NextThinkTime > CurTime() then return true end
+	self.NextThinkTime = CurTime() + 1
 
 	if svault.config.maxraiderdist then
 		local raidID = svault.raidmanager:GetVaultRaidID(self)
@@ -36,13 +41,23 @@ function ENT:Think()
 		end
 	end
 
+	if self:GetState() != VAULT_RECOVERING then
+		if self:GetValue() < svault.config.minvaultvalue then
+			self:StartRecovering()
+		end
+	else
+		if self:GetValue() >= svault.config.minvaultvalue then
+			self:FinishRecovering()
+		end
+	end
+
 	return true
 end
 
 function ENT:Use(ply)
 	local raidID = svault.raidmanager:GetVaultRaidID(self)
 	if not raidID then
-		if not self:GetState(VAULT_IDLE) then ply:sVaultNotify(svault.lang.cantstartcooldown) return end
+		if self:GetState() != VAULT_IDLE then ply:sVaultNotify(svault.lang.cantstartcooldown) return end
 
 		local response = svault.raidmanager:StartRaid(ply, self)
 		if response != "successful" then
@@ -112,6 +127,8 @@ end
 function ENT:CloseVault()
 	self:ResetSequence(0)
 	self:StartCooldown()
+
+	svault.raidmanager:FinishRaid(self)
 end
 
 function ENT:HackVault()
@@ -121,8 +138,9 @@ end
 function ENT:StartCooldown()
 	self:SetState(VAULT_COOLDOWN)
 	self:SetTimerLength(svault.config.cooldowntime)
-	self:SetTimerEnd(CurTime() + svault.config.cooldowntime)	self:SetRobberNames("")
+	self:SetTimerEnd(CurTime() + svault.config.cooldowntime)
 	self:SetRobberNames("")
+	self:SetSecurityEnabled(true)
 
 	timer.Create("sVaultCooldownTimer" .. self:EntIndex(), svault.config.cooldowntime, 1, function()
 		self:SetState(VAULT_IDLE)
@@ -136,4 +154,12 @@ function ENT:StartRecovering()
 	self:SetTimerLength(0)
 	self:SetTimerEnd(0)
 	self:SetRobberNames("")
+	self:SetSecurityEnabled(true)
+end
+function ENT:FinishRecovering()
+	self:SetState(VAULT_IDLE)
+	self:SetTimerLength(0)
+	self:SetTimerEnd(0)
+	self:SetRobberNames("")
+	self:SetSecurityEnabled(true)
 end
