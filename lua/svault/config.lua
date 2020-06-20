@@ -52,7 +52,8 @@ svault.config.dropmoney = false --Should we drop the money in front of the bank 
 
 svault.config.hackerselfdestructtime = 10 --How many seconds after a successful hack should it take for the hacker to self destruct?
 svault.config.hackerexplosiondamage = true --Should the hacker cause explosion damage to nearby players on self destruct?
-svault.config.hackerminhacktime = 5 --The minimum time it should take for someone to hack the security system
+svault.config.hackerscrollspeed = 150 --The speed the letters scroll at in the hacking device
+svault.config.hackerminhacktime = 5 --The minimum time it should take for someone to hack the security system (seconds)
 
 svault.config.draw3d2ddist = 690 --What should be the maximum distance from the vault that you can see the 3D2D at?
 
