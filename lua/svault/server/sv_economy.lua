@@ -33,5 +33,7 @@ end
 timer.Create("sVaultEconomyTick", svault.config.econonmyupdaterate, 0, svault.economymanager.UpdateAllVaults)
 
 hook.Add("GlorifiedBanking.FeeTaken", "sVaultAddFeesToVaults", function(_, amount)
+    if not svault.config.glorifiedbankingfees then return end
+
     svault.economymanager.ShareAcrossAllVaults(amount)
 end)
