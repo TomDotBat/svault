@@ -35,12 +35,35 @@ hook.Add("playerBoughtCustomEntity", "sVaultSetHacker", function(ply, enttbl, en
 end)
 
 function ENT:Use(ply)
+    self:SelfDestruct(true)
+
     if not IsValid(ply) or not ply:IsPlayer() then return end
     if ply != self:GetHacker() then return end
     if self:GetOpened() then return end
 
     self:SetOpened(true)
     self:ResetSequence(1)
+end
+
+function ENT:SelfDestruct(skipTimer)
+    if not skipTimer then
+        timer.Create("sVault.HackerSelfDestruct:" .. self:EntIndex(), svault.config.hackerselfdestructtime, 1, function()
+            if not IsValid(self) then return end
+            self:SelfDestruct(true)
+        end)
+        return
+    end
+
+    local pos = self:GetPos()
+
+    local effectdata = EffectData()
+    effectdata:SetOrigin(pos)
+    util.Effect("HelicopterMegaBomb", effectdata, false, true)
+
+    util.ScreenShake(pos, 2, 3, .5, 500)
+
+    if not svault.config.hackerexplosiondamage then return end
+    util.BlastDamage(self, self, pos, 90, 10)
 end
 
 net.Receive("sVaultHackerPressStart", function(len, ply)
