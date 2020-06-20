@@ -26,7 +26,7 @@ function ENT:Think()
 
 		local vaultPos = self:GetPos()
 		for k,v in ipairs(raid.participants) do
-			if v:GetPos():DistToSqr(vaultPos) > svault.config.maxraiderdist then
+			if v:GetPos():DistToSqr(vaultPos) > svault.config.maxraiderdist ^ 2 then
 				svault.raidmanager:LeaveRaid(victim, raid.vault)
 
 				if !svault.config.rejoinoutofrange then
@@ -104,6 +104,10 @@ function ENT:OpenVault()
 end
 
 function ENT:CloseVault()
+
+end
+
+function ENT:HackVault()
 
 end
 
