@@ -178,6 +178,17 @@ function svault.raidmanager:EndRaidTimer(vault)
     vault:OpenVault()
 end
 
+function svault.raidmanager:FinishRaid(vault)
+    local raidID = self:GetVaultRaidID(vault)
+    if !raidID then return false end
+
+    for k,v in ipairs(self.raids[raidID].participants) do
+        v:sVaultNotify(svault.lang.raidsuccess)
+    end
+
+    self.raids[raidID] = nil
+end
+
 hook.Add("PlayerDisconnected", "sVaultRaidManager", function(ply)
     local raid = svault.raidmanager:GetPlayerOngoingRaid(ply)
     if !raid then return end
@@ -232,7 +243,7 @@ hook.Add("PlayerDeath", "sVaultRaidManager", function(victim, inflictor, attacke
         raid.vault:SetTimerEnd(raid.vault:GetTimerEnd() + svault.config.raiderkilledpenalty)
 
         for k,v in ipairs(raid.participants) do
-            v:sVaultNotify(svault.lang.lang.raiderkilledpenalty)
+            v:sVaultNotify(svault.lang.raiderkilledpenalty)
         end
     end
 
