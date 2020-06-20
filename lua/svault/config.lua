@@ -94,8 +94,10 @@ svault.config.hackerFinishTextCol = Color(255, 255, 255)
 svault.config.hackerFinishStandBackCol = Color(255, 0, 0)
 
 svault.config.hackerControlBgCol = Color(66, 61, 54, 220)
-svault.config.hackerButtonCol = Color(255, 255, 255)
-svault.config.hackerButtonHoverCol = Color(200, 200, 200)
+svault.config.hackerInstructionsCol = Color(255, 255, 255)
+svault.config.hackerButtonCol = Color(194, 51, 51)
+svault.config.hackerButtonHoverCol = Color(153, 40, 40)
+svault.config.hackerButtonTextCol = Color(255, 255, 255)
 
 --[[-------------------------------------------------------------------------
 End of sVault Configuration
