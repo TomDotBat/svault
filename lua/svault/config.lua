@@ -7,8 +7,8 @@ svault.config = {} --Don't touch this line
 --[[-------------------------------------------------------------------------
 Language
 ---------------------------------------------------------------------------]]
---/Use the file name from the lang folder, make sure to remove the .lua extension
---/Currently available languages: english
+--Use the file name from the lang folder, make sure to remove the .lua extension
+--Currently available languages: english
 svault.config.language = "english"
 
 --[[-------------------------------------------------------------------------
@@ -17,6 +17,11 @@ General Settings
 svault.config.vaultname = "Bank Vault" --The name of the vault on the 3D2D
 svault.config.chatprefix = "[sVault]" --The chat prefix to use for notifications if you're using the chat notification method
 svault.config.notifymethod = 1 --The method used to notify the player 1 = Chat, 2 = Notifications
+
+svault.config.econonmyupdaterate = 300 --How often should vault balances increase?
+svault.config.econonmyupdateamount = 50000 --How much should get added to the vault on each economy update?
+svault.config.maxvaultvalue = 1000000 --The maximum money a vault can store at one time
+svault.config.glorifiedbankingfees = true --Should we take transaction fees from Glorified Banking and put them into the vault?
 
 svault.config.policeteams = { --The teams that are classified as law enforcement
 	["Policeman"] = true
@@ -33,6 +38,7 @@ svault.config.maxprogresstojoin = 30 --The furthest percentage into the raid unt
 
 svault.config.warmuptime = 30 --How long should the warmup period last in seconds?
 svault.config.securitytimer = 10 --How long should the vault wait before alerting police if the security is disabled?
+svault.config.securitytimerdisabled = 20 --How long should the vault wait before alerting police if the security is enabled?
 svault.config.raidbasetime = 30 --What is the minimum time it should take to raid the vault?
 svault.config.raidmembertimemultiplier = 10 --How many extra seconds should be added to the timer per extra raid party member?
 svault.config.cooldowntime = 30 --How long should the cooldown last for after an unsuccessful raid?
