@@ -18,11 +18,11 @@ function ENT:SetupDataTables()
 
 	if SERVER then
 		self:SetState(VAULT_IDLE)
-		self:SetValue(1500000)
+		self:SetValue(0)
 		self:SetTimerLength(0)
 		self:SetTimerEnd(0)
 		self:SetSecurityTimerEnd(0)
-		self:SetSecurityEnabled(false)
+		self:SetSecurityEnabled(true)
 		self:SetRobberNames("")
 	end
 end
