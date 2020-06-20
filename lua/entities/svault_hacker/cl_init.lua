@@ -244,10 +244,6 @@ ENT.Screens = {
         surface.SetDrawColor(svault.config.hackerBgCol) --BG
         surface.DrawRect(0, 0, w, h)
 
-        --Security disabled,
-        --Destroying evidence, in 10s
-        --please stand back
-
         surface.SetFont("sVaultHackingFinishLarge")
         local textH = select(2, surface.GetTextSize(svault.lang.securitydisabled))
 
