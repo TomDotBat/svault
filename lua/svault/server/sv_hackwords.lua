@@ -1,5 +1,9 @@
 
---Here's a dumb file of 12 letter words in upper case :)
+function svault.GetRandomHackingWord()
+    return svault.HackingWords[math.random(1, #svault.HackingWords)]
+end
+
+--Here's a dumb list of 12 letter words in upper case :)
 svault.HackingWords = {
     "ALLITERATION",
     "UNIDENTIFIED",
