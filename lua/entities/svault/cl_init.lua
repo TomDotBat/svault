@@ -212,13 +212,13 @@ function ENT:Draw()
         surface.SetMaterial(shadowMat)
         surface.DrawTexturedRect(0, offy, w, 460)
 
-        local progress = state == VAULT_IDLE and 1 or 1 - ((self:GetTimerEnd() - CurTime()) / self:GetTimerLength())
+        local progress = (state == VAULT_IDLE and 1) or (state == VAULT_RECOVERING and 1) or (1 - ((self:GetTimerEnd() - CurTime()) / self:GetTimerLength()))
         progress = math.Clamp(progress, 0, 1)
 
         draw.RoundedBox(32, w * .08, offy, w * .84, 300, svault.config.primaryCol)
         draw.RoundedBox(16, w * .08 + 20, offy + 20, w * .84 - 40, 260, svault.config.progBgCol)
         draw.RoundedBox(16, w * .08 + 20, offy + 20, (w * .84 - 40) * progress, 260, svault.config.progCol)
-        draw.SimpleText(state == VAULT_IDLE and svault.lang.idle or (math.Round(progress * 100) .. "%"), "sVaultPercent", w * .5, offy + 150, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText((state == VAULT_IDLE and svault.lang.idle) or (state == VAULT_RECOVERING and svault.lang.recovering) or (math.Round(progress * 100) .. "%"), "sVaultPercent", w * .5, offy + 150, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
         offy = offy + 300 + 40
 
