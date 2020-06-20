@@ -160,14 +160,9 @@ function svault.raidmanager:StartRaidTimer(vault)
         self:EndRaidTimer(vault)
     end)
 
-    if vault:GetSecurityEnabled() then
+    timer.Create("sVaultSecurityTimer" .. vault:EntIndex(), vault:GetSecurityEnabled() and svault.config.securitytimer or svault.config.securitytimerdisabled, 1, function()
         self:TriggerSecurity(vault)
-    else
-        vault:SetSecurityTimerEnd(CurTime() + svault.config.securitytimer)
-        timer.Create("sVaultSecurityTimer" .. vault:EntIndex(), timerLength, 1, function()
-            self:TriggerSecurity(vault)
-        end)
-    end
+    end)
 end
 
 function svault.raidmanager:TriggerSecurity(vault)
