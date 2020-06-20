@@ -146,7 +146,7 @@ function imgui.Start3D2D(pos, angles, scale, distanceHide, distanceFadeStart)
 		local hitPos = util.IntersectRayWithPlane(eyepos, eyenormal, pos, planeNormal)
 		if hitPos then
 			local obstructed, obstructer = isObstructed(eyepos, hitPos)
-			if obstructed then
+			if obstructed and obstructer != gState.entity then
 				gState.mx = nil
 				gState.my = nil
 				
