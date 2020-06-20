@@ -11,10 +11,12 @@ function ENT:SetupDataTables()
     self:NetworkVar("Entity", 0, "owning_ent")
     self:NetworkVar("Int", 0, "ScreenID")
     self:NetworkVar("Bool", 0, "Opened")
+    self:NetworkVar("Float", 0, "SelfDestructTime")
 
     if SERVER then
         self:SetScreenID(1)
         self:SetOpened(false)
+        self:SetSelfDestructTime(0)
     end
 end
 
