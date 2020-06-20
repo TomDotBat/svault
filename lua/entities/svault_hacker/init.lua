@@ -22,10 +22,7 @@ function ENT:Think()
 end
 
 function ENT:SetHacker(ply)
-    if self.Setowning_ent then
-        self:Setowning_ent(ply)
-    end
-
+    self:Setowning_ent(ply)
     self:CPPISetOwner(ply)
 end
 
