@@ -49,5 +49,13 @@ lang.vaultbreached = "A vault's security has been breached, please investigate."
 lang.securitydisabled = "SECURITY DISABLED"
 lang.destroyingevidence = "DESTROYING EVIDENCE IN %s"
 lang.standback = "PLEASE STAND BACK"
+lang.hackerstop = "STOP"
+lang.hackerinstructions = [[SECURITY SMASHER v2.0 INSTRUCTIONS
+-------------------------------------------------
+1: Place this device near a bank vault.
+2: Boot up the device and press start.
+3: Complete the hacking proccess by finding the correct word in the scrambler.
+4: Dispose of the device safely.]]
+
 
 return lang

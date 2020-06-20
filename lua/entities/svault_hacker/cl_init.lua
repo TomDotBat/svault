@@ -40,9 +40,16 @@ surface.CreateFont("sVaultHackingFinishLarge", {
     antialias = true
 })
 
+surface.CreateFont("sVaultHackingInstructions", {
+    font = "Calibri",
+    size = 20,
+    weight = 400,
+    antialias = true
+})
+
 surface.CreateFont("sVaultHackingStopButton", {
     font = "Arial",
-    size = 100,
+    size = 54,
     weight = 700,
     antialias = true
 })
@@ -179,7 +186,7 @@ ENT.Screens = {
 
         surface.SetFont("sVaultHackingName")
         local nameH = select(2, surface.GetTextSize(hackerName))
-        local nameY = h * .5 - nameH * .5 + math.sin(CurTime() * 1) * 20 - 60
+        local nameY = h * .5 - nameH * .5 + math.sin(CurTime() * 1) * 20 - 60 -- would be kinda hot if we made the text shake on error
 
         draw.DrawText(hackerName, "sVaultHackingName", w * .5, nameY, svault.config.hackerNameCol, TEXT_ALIGN_CENTER) --Draw that really lit name bro
 
@@ -262,7 +269,7 @@ ENT.Screens = {
 
         finishCutOut()
     end,
-    [2] = function(self)
+    [3] = function(self)
         surface.SetDrawColor(svault.config.hackerBgCol) --BG
         surface.DrawRect(0, 0, w, h)
 
@@ -281,31 +288,43 @@ ENT.Screens = {
     end
 }
 
-local function outlinedBox(x, y, boxW, boxH, thickness)
-    for i = 0, thickness - 1 do
-        surface.DrawOutlinedRect(x + i, y + i, boxW - i * 2, boxH - i * 2)
-    end
-end
+svault.lang.hackerinstructions = [[SECURITY SMASHER v2.0 INSTRUCTIONS
+-------------------------------------------------
+1: Place this device near a bank vault.
+2: Boot up the device and press start.
+3: Complete the hacking proccess by finding the correct word in the scrambler
+4: Dispose of the device safely.]]
+
+local circleMat = Material("svault/circle.png", "noclamp smooth")
 
 local controlW, controlH = 587, 468
 local controlPos = Vector(-9.35, -11.73, 5.73)
 local controlAng = Angle(0, 90, 0)
 function ENT:DrawControls()
-    if self:GetScreenID() != 2 then return end
-
     if imgui.Entity3D2D(self, controlPos, controlAng, 0.04, svault.config.draw3d2ddist, svault.config.draw3d2ddist - 40) then
         draw.RoundedBox(0, 0, 0, controlW, controlH, svault.config.hackerControlBgCol)
 
-        local btnW, btnH = controlW * .8, controlH * .5
-        local btnX, btnY = controlW * .5 - btnW * .5, controlH * .5 - btnH * .5
+        draw.DrawText(svault.lang.hackerinstructions, "sVaultHackingInstructions", 10, 10, svault.config.hackerInstructionsCol)
 
-        local col = imgui.IsHovering(btnX, btnY, btnW, btnH) and svault.config.hackerButtonHoverCol or svault.config.hackerButtonCol
+        if self:GetScreenID() != 2 then
+            imgui.End3D2D()
+            return
+        end
 
-        surface.SetDrawColor(col)
 
-        outlinedBox(btnX, btnY, btnW, btnH, 10)
+        local btnSize = controlH * .35
+        local btnX, btnY = controlW * .5 - btnSize * .5, controlH * .65 - btnSize * .5
 
-        draw.SimpleText("STOP", "sVaultHackingStopButton", btnX + btnW * .5, btnY + btnH * .5, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        if imgui.IsHovering(btnX, btnY, btnSize, btnSize) then
+            surface.SetDrawColor(svault.config.hackerButtonHoverCol)
+        else
+            surface.SetDrawColor(svault.config.hackerButtonCol)
+        end
+
+        surface.SetMaterial(circleMat)
+        surface.DrawTexturedRect(btnX, btnY, btnSize, btnSize)
+
+        draw.SimpleText(svault.lang.hackerstop, "sVaultHackingStopButton", btnX + btnSize * .5, btnY + btnSize * .5, svault.config.hackerButtonTextCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
         imgui.End3D2D()
     end
