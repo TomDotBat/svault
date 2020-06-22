@@ -225,6 +225,7 @@ svault.HackingWords = {
     "ACHIEVEMENTS",
     "INVESTORSHUB",
     "AMPHETAMINES",
+    "ANIMETIDDIES",
     "COCCYGECTOMY",
     "CELLULOLYTIC",
     "ABANDONMENTS",
