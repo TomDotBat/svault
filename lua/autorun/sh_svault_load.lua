@@ -26,13 +26,13 @@ if SERVER then
 	for k, v in pairs(file.Find(folder .. "/server/*.lua", "LUA")) do
 		include(folder .. "/server/" .. v)
 	end
+	
+	resource.AddWorkshop("2143071959")
 else
 	for k, v in pairs(file.Find(folder .. "/client/*.lua", "LUA")) do
 		include(folder .. "/client/" .. v)
 	end
 end
-
-resource.AddWorkshop("2143071959")
 
 VAULT_IDLE, VAULT_WARMUP, VAULT_RAIDING, VAULT_OPEN, VAULT_RECOVERING, VAULT_COOLDOWN = 1, 2, 3, 4, 5, 6
 RAID_WARMUP, RAID_INPROGRESS, RAID_SUCCESSFUL = 1, 2, 3
