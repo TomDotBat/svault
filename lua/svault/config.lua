@@ -27,14 +27,15 @@ svault.config.minvaultvalue = 900000 --The minimum money needed in the vault to 
 svault.config.maxvaultvalue = 1000000 --The maximum money a vault can store at one time
 
 svault.config.policeteams = { --The teams that are classified as law enforcement
+	["CP"] = true,
 	["Policeman"] = true
 }
 svault.config.canraidteams = false --The teams that can start a raid, set to false for anyone
 
 svault.config.maxparticipants = 8 --The maximum amount of people taking part in one raid
 
-svault.config.minplayers = 0 --The minimum amount of players online needed to start a raid
-svault.config.minpolice = 0 --The minimum amount of active police needed to start a raid
+svault.config.minplayers = 10 --The minimum amount of players online needed to start a raid
+svault.config.minpolice = 4 --The minimum amount of active police needed to start a raid
 
 svault.config.maxraidsongoing = 2 --The maximum amount of raids happening at one time
 svault.config.maxprogresstojoin = 30 --The furthest percentage into the raid until joining is no longer allowed
@@ -70,12 +71,6 @@ svault.config.draw3d2ddist = 690 --What should be the maximum distance from the 
 
 svault.config.preventphysgun = true --Should we prevent permanent vaults from being physgunned?
 svault.config.preventtoolgun = true --Should we prevent permanent vaults from being toolgunned?
-
---[[-------------------------------------------------------------------------
-Resource Settings
----------------------------------------------------------------------------]]
-svault.config.usefastdl = false --Should the content be added to fast dl?
-svault.config.useworkshopdl = false --Should the content be added to force download?
 
 --[[-------------------------------------------------------------------------
 Colour Settings
