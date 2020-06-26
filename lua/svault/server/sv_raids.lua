@@ -160,15 +160,15 @@ function svault.raidmanager:StartRaidTimer(vault)
         self:EndRaidTimer(vault)
     end)
 
-    timer.Create("sVaultSecurityTimer" .. vault:EntIndex(), vault:GetSecurityEnabled() and svault.config.securitytimer or svault.config.securitytimerdisabled, 1, function()
+    local securityTime = vault:GetSecurityEnabled() and svault.config.securitytimer or svault.config.securitytimerdisabled
+    vault:SetSecurityTimerEnd(CurTime() + securityTime)
+
+    timer.Create("sVaultSecurityTimer" .. vault:EntIndex(), securityTime, 1, function()
         self:TriggerSecurity(vault)
     end)
 end
 
 function svault.raidmanager:TriggerSecurity(vault)
-    vault:SetSecurityEnabled(true)
-    vault:SetSecurityTimerEnd(CurTime() + svault.config.securitytimer)
-
     for k,v in ipairs(getPolice()) do
         v:sVaultNotify(svault.lang.vaultbreached)
     end

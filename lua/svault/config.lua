@@ -22,6 +22,7 @@ svault.config.econonmyupdaterate = 300 --How often should vault balances increas
 svault.config.econonmyupdateamount = 50000 --How much should get added to the vault on each economy update?
 svault.config.glorifiedbankingfees = true --Should we take transaction fees from Glorified Banking and put them into the vault?
 
+svault.config.vaultstartvalue = 900000 --The value the vault should spawn in with
 svault.config.minvaultvalue = 900000 --The minimum money needed in the vault to start a raid
 svault.config.maxvaultvalue = 1000000 --The maximum money a vault can store at one time
 
@@ -63,6 +64,7 @@ svault.config.hackerselfdestructtime = 10 --How many seconds after a successful 
 svault.config.hackerexplosiondamage = true --Should the hacker cause explosion damage to nearby players on self destruct?
 svault.config.hackerscrollspeed = 150 --The speed the letters scroll at in the hacking device
 svault.config.hackerminhacktime = 5 --The minimum time it should take for someone to hack the security system (seconds)
+svault.config.hackreenabletime = 300 --How long after the hack should we wait to re enable the security system if the vault doesn't get raided?
 
 svault.config.draw3d2ddist = 690 --What should be the maximum distance from the vault that you can see the 3D2D at?
 

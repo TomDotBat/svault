@@ -2,61 +2,61 @@
 include("shared.lua")
 
 surface.CreateFont("sVaultTitle", {
-    font = "Montserrat",
+    font = "Montserrat SemiBold",
     size = 230,
     weight = 500
 })
 
 surface.CreateFont("sVaultSmallTitle", {
-    font = "Montserrat",
+    font = "Montserrat Medium",
     size = 130,
     weight = 500
 })
 
 surface.CreateFont("sVaultSecurityMessage", {
-    font = "Montserrat",
+    font = "Montserrat Medium",
     size = 100,
     weight = 500
 })
 
 surface.CreateFont("sVaultSecurityTime", {
-    font = "Montserrat",
+    font = "Montserrat Medium",
     size = 170,
     weight = 600
 })
 
 surface.CreateFont("sVaultStatus", {
-    font = "Montserrat",
+    font = "Montserrat Medium",
     size = 140,
     weight = 500
 })
 
 surface.CreateFont("sVaultPercent", {
-    font = "Montserrat",
+    font = "Montserrat Medium",
     size = 230,
     weight = 500
 })
 
 surface.CreateFont("sVaultInfoTitle", {
-    font = "Montserrat",
+    font = "Montserrat Medium",
     size = 110,
     weight = 500
 })
 
 surface.CreateFont("sVaultInfo", {
-    font = "Montserrat",
+    font = "Montserrat Medium",
     size = 90,
     weight = 600
 })
 
 surface.CreateFont("sVaultRobbersTitle", {
-    font = "Montserrat",
+    font = "Montserrat Medium",
     size = 130,
     weight = 500
 })
 
 surface.CreateFont("sVaultRobber", {
-    font = "Montserrat",
+    font = "Montserrat Medium",
     size = 100,
     weight = 500
 })
@@ -142,7 +142,7 @@ function ENT:Draw()
         draw.RoundedBox(20, w * .04, offy, w * .92, 40, svault.config.primaryCol)
         draw.RoundedBox(20, w * .04, offy + th * 1.4 - 40, w * .92, 40, svault.config.primaryCol)
 
-        draw.SimpleText(vaultname, "sVaultTitle", w / 2, offy + th * .7, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText(vaultname, "sVaultTitle", w / 2, offy + th * .67, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
         offy = offy + th * 1.4 + spacing
 
@@ -169,18 +169,28 @@ function ENT:Draw()
         surface.SetMaterial(securityMat)
         surface.DrawTexturedRect(w * .06 + 40, offy + sh * .55 - 10, 100, 100)
 
-        draw.SimpleText(svault.lang.securitysystem, "sVaultSmallTitle", w * .06 + 40 + 100 + 30, offy + sh * .55 + 40, svault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-        draw.SimpleText(security and svault.lang.enabled or svault.lang.disabled, "sVaultSmallTitle", w * .06 + w * .88 - 40, offy + sh * .55 + 40, security and svault.config.onCol or svault.config.offCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(svault.lang.securitysystem, "sVaultSmallTitle", w * .06 + 40 + 100 + 30, offy + sh * .55 + 30, svault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(security and svault.lang.enabled or svault.lang.disabled, "sVaultSmallTitle", w * .06 + w * .88 - 40, offy + sh * .55 + 30, security and svault.config.onCol or svault.config.offCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
         draw.RoundedBox(20, w * .06, offy + sh * 1.4, w * .88, 40, svault.config.primaryCol)
-        draw.DrawText(svault.lang.alertcps, "sVaultSecurityMessage", w * .5, offy + sh * 1.4 + 40, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+        
+        if state == VAULT_RAIDING then
+            draw.DrawText(svault.lang.alertcps, "sVaultSecurityMessage", w * .5, offy + sh * 1.4 + 40, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
-        surface.SetFont("sVaultSecurityTime")
-        local tmw, tmh = surface.GetTextSize(timeLeftText)
-        tmw = tmh + 5 + tmw
-        surface.SetDrawColor(svault.config.warningCol)
-        surface.SetMaterial(timerMat)
-        surface.DrawTexturedRect(w * .5 - tmw * .5, offy + sh * 1.4 + msgh + 40 + tmh * .1, tmh * .8, tmh * .8)
-        draw.SimpleText(timeLeftText, "sVaultSecurityTime", w * .5 + tmw * .5, offy + sh * 1.4 + msgh + 40, svault.config.warningCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+            surface.SetFont("sVaultSecurityTime")
+            local tmw, tmh = surface.GetTextSize(timeLeftText)
+            tmw = tmh + 5 + tmw
+            surface.SetDrawColor(svault.config.warningCol)
+            surface.SetMaterial(timerMat)
+            surface.DrawTexturedRect(w * .5 - tmw * .5, offy + sh * 1.4 + msgh + 40 + tmh * .1, tmh * .8, tmh * .8)
+            draw.SimpleText(timeLeftText, "sVaultSecurityTime", w * .5 + tmw * .5, offy + sh * 1.4 + msgh + 40, svault.config.warningCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+        else
+            if self:GetSecurityEnabled() then
+                draw.DrawText(svault.lang.securityenabled, "sVaultSecurityMessage", w * .5, offy + sh * 1.4 + 110, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            else
+                draw.DrawText(svault.lang.securitydisabledmsg, "sVaultSecurityMessage", w * .5, offy + sh * 1.4 + 110, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            end
+        end
+        
         draw.RoundedBox(20, w * .06, offy + sh * 1.4 + msgh + 40 + sth, w * .88, 40, svault.config.primaryCol)
         offy = offy + sh * 1.4 + msgh + 40 + sth + 40 + spacing
 
@@ -195,7 +205,7 @@ function ENT:Draw()
         draw.RoundedBox(32, w * .06, offy, w * .88, 40 + 20 + rh + 10 + 40 + 300 + 40 + ih + 740, svault.config.boxBgCol)
         draw.RoundedBox(20, w * .06, offy, w * .88, 40, svault.config.primaryCol)
         draw.RoundedBox(0, w / 2 - (rw * 1.1) / 2, offy + 40 + 20, rw * 1.1, 18, svault.config.lineCol)
-        draw.SimpleText(statusText, "sVaultStatus", w * .5, offy + 40 + 20 + 4 + rh * .5, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText(statusText, "sVaultStatus", w * .5, offy + 40 + 20 + rh * .5, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         draw.RoundedBox(0, w / 2 - (rw * 1.1) / 2, offy + 40 + 20 + rh - 8, rw * 1.1, 18, svault.config.lineCol)
 
         if state == VAULT_RAIDING or state == VAULT_OPEN then
@@ -218,7 +228,7 @@ function ENT:Draw()
         draw.RoundedBox(32, w * .08, offy, w * .84, 300, svault.config.primaryCol)
         draw.RoundedBox(16, w * .08 + 20, offy + 20, w * .84 - 40, 260, svault.config.progBgCol)
         draw.RoundedBox(16, w * .08 + 20, offy + 20, (w * .84 - 40) * progress, 260, svault.config.progCol)
-        draw.SimpleText((state == VAULT_IDLE and svault.lang.idle) or (state == VAULT_RECOVERING and svault.lang.recovering) or (math.Round(progress * 100) .. "%"), "sVaultPercent", w * .5, offy + 150, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText((state == VAULT_IDLE and svault.lang.idle) or (state == VAULT_RECOVERING and svault.lang.recovering) or (math.Round(progress * 100) .. "%"), "sVaultPercent", w * .5, offy + 140, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
         offy = offy + 300 + 40
 
@@ -266,7 +276,7 @@ function ENT:Draw()
 
         draw.RoundedBox(32, w * .06, offy, w * .88, (h - 100) - offy - spacing, svault.config.boxBgCol)
         draw.RoundedBox(20, w * .06, offy, w * .88, 40, svault.config.primaryCol)
-        draw.SimpleText(svault.lang.currentrobbers, "sVaultRobbersTitle", w * .5, offy + crh * .55 + 40, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText(svault.lang.currentrobbers, "sVaultRobbersTitle", w * .5, offy + crh * .55 + 35, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         draw.RoundedBox(20, w * .06, offy + crh * 1.4, w * .88, 40, svault.config.primaryCol)
 
         surface.SetDrawColor(self.Robbers[1] and svault.config.onCol or svault.config.offCol)

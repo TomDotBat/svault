@@ -18,7 +18,7 @@ function ENT:SetupDataTables()
 
 	if SERVER then
 		self:SetState(VAULT_IDLE)
-		self:SetValue(0)
+		self:SetValue(svault.config.vaultstartvalue)
 		self:SetTimerLength(0)
 		self:SetTimerEnd(0)
 		self:SetSecurityTimerEnd(0)

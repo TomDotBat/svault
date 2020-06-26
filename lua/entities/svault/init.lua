@@ -24,6 +24,16 @@ function ENT:Think()
 	if self.NextThinkTime > CurTime() then return true end
 	self.NextThinkTime = CurTime() + 1
 
+	if self:GetState() != VAULT_RECOVERING then
+		if self:GetValue() < svault.config.minvaultvalue then
+			self:StartRecovering()
+		end
+	else
+		if self:GetValue() >= svault.config.minvaultvalue then
+			self:FinishRecovering()
+		end
+	end
+
 	if svault.config.maxraiderdist then
 		local raidID = svault.raidmanager:GetVaultRaidID(self)
 		if not raidID then return true end
@@ -38,16 +48,6 @@ function ENT:Think()
 					svault.raidmanager.raids[raidID].leftparticipants[#raid.leftparticipants + 1] = v
 				end
 			end
-		end
-	end
-
-	if self:GetState() != VAULT_RECOVERING then
-		if self:GetValue() < svault.config.minvaultvalue then
-			self:StartRecovering()
-		end
-	else
-		if self:GetValue() >= svault.config.minvaultvalue then
-			self:FinishRecovering()
 		end
 	end
 
@@ -99,6 +99,7 @@ function ENT:OpenVault()
 	self:SetTimerEnd(0)
 
 	self:ResetSequence(0)
+	self:SetPlaybackRate(1)
 
 	timer.Simple(self:SequenceDuration(0) + 3, function()
 		if not IsValid(self) then return end
@@ -125,14 +126,20 @@ function ENT:OpenVault()
 end
 
 function ENT:CloseVault()
-	self:ResetSequence(0)
+	self:SetPlaybackRate(-1)
 	self:StartCooldown()
 
 	svault.raidmanager:FinishRaid(self)
 end
 
 function ENT:HackVault()
+	self:SetSecurityEnabled(false)
 
+	timer.Create("sVaultHackReenableTimer" .. self:EntIndex(), svault.config.hackreenabletime, 1, function()
+		if not IsValid(self) then return end
+		if self:GetState() == VAULT_RAIDING then return end
+		self:SetSecurityEnabled(true)
+	end)
 end
 
 function ENT:StartCooldown()
@@ -143,6 +150,7 @@ function ENT:StartCooldown()
 	self:SetSecurityEnabled(true)
 
 	timer.Create("sVaultCooldownTimer" .. self:EntIndex(), svault.config.cooldowntime, 1, function()
+		if not IsValid(self) then return end
 		self:SetState(VAULT_IDLE)
 		self:SetTimerLength(0)
 		self:SetTimerEnd(0)
@@ -154,8 +162,8 @@ function ENT:StartRecovering()
 	self:SetTimerLength(0)
 	self:SetTimerEnd(0)
 	self:SetRobberNames("")
-	self:SetSecurityEnabled(true)
 end
+
 function ENT:FinishRecovering()
 	self:SetState(VAULT_IDLE)
 	self:SetTimerLength(0)
