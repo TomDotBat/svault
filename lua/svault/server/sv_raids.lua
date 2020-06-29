@@ -257,6 +257,7 @@ hook.Add("PlayerDeath", "sVaultRaidManager", function(victim, inflictor, attacke
     end
 
     if svault.config.policeteams[team.GetName(attacker:Team())] and svault.config.policekillreward then
+        hook.Run("sVaultPoliceKilledRaider", attacker, victim)
         attacker:addMoney(svault.config.policekillreward)
         attacker:sVaultNotify(string.Replace(svault.lang.killedraiderreward, "%m", DarkRP.formatMoney(svault.config.policekillreward)))
     end
