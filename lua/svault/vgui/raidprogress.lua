@@ -1,4 +1,4 @@
 
 local PANEL = {}
 
-vgui.Register("OGLVault.RaidProgress", PANEL, "OGLVault.Frame")
+vgui.Register("sVault.RaidProgress", PANEL, "sVault.Frame")

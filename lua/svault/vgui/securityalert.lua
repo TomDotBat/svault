@@ -1,4 +1,11 @@
 
 local PANEL = {}
 
-vgui.Register("OGLVault.SecurityAlert", PANEL, "OGLVault.Frame")
+function PANEL:Init()
+    self.Title = svault.lang.securityalert
+    self:CreateCloseButton()
+end
+
+
+
+vgui.Register("sVault.SecurityAlert", PANEL, "sVault.Frame")
