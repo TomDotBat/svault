@@ -23,14 +23,22 @@ if SERVER then
 		AddCSLuaFile(folder .. "/client/" .. v)
 	end
 
+	for k, v in pairs(file.Find(folder .. "/vgui/*.lua", "LUA")) do
+		AddCSLuaFile(folder .. "/vgui/" .. v)
+	end
+
 	for k, v in pairs(file.Find(folder .. "/server/*.lua", "LUA")) do
 		include(folder .. "/server/" .. v)
 	end
-	
+
 	resource.AddWorkshop("2143071959")
 else
 	for k, v in pairs(file.Find(folder .. "/client/*.lua", "LUA")) do
 		include(folder .. "/client/" .. v)
+	end
+
+	for k, v in pairs(file.Find(folder .. "/vgui/*.lua", "LUA")) do
+		include(folder .. "/vgui/" .. v)
 	end
 end
 
