@@ -109,6 +109,8 @@ svault.config.hackerButtonTextCol = Color(255, 255, 255)
 svault.config.uiBackgroundCol = Color(55, 55, 55)
 svault.config.uiHeaderCol = Color(236, 55, 58)
 svault.config.uiTitleCol = Color(255, 255, 255)
+svault.config.closeButtonCol = Color(255, 255, 255)
+svault.config.closeButtonHoverCol = Color(220, 220, 220)
 
 --[[-------------------------------------------------------------------------
 End of sVault Configuration
