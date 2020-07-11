@@ -62,5 +62,14 @@ lang.hackerinstructions = [[SECURITY SMASHER v2.0 INSTRUCTIONS
 3: Complete the hacking proccess by finding the correct word in the scrambler.
 4: Dispose of the device safely.]]
 lang.securityalert = "SECURITY ALERT"
+lang.counterraid = "COUNTER"
+lang.leaveraid = "LEAVE"
+lang.raidcountertitle = "!ALERT!"
+lang.raidcountermessage = [[A vault's security has
+been breached, would you
+like to counter the raid?]]
+lang.raidprogressmessage = [[RAIDERS LEFT: #l
+POLICE JOINED: #j
+TIME LEFT: #t]]
 
 return lang

@@ -111,6 +111,11 @@ svault.config.uiHeaderCol = Color(236, 55, 58)
 svault.config.uiTitleCol = Color(255, 255, 255)
 svault.config.closeButtonCol = Color(255, 255, 255)
 svault.config.closeButtonHoverCol = Color(220, 220, 220)
+svault.config.counterButtonCol = Color(78, 185, 101)
+svault.config.counterButtonHoverCol = Color(57, 140, 75)
+svault.config.leaveButtonCol = Color(200, 64, 64)
+svault.config.leaveButtonHoverCol = Color(161, 52, 52)
+svault.config.actionButtonTextCol = Color(255, 255, 255)
 
 --[[-------------------------------------------------------------------------
 End of sVault Configuration

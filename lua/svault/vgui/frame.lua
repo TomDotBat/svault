@@ -13,6 +13,13 @@ surface.CreateFont("sVault.FrameTitle", {
     antialias = true
 })
 
+surface.CreateFont("sVault.ActionButtion", {
+    font = "Montserrat SemiBold",
+    size = screenScale(34),
+    weight = 500,
+    antialias = true
+})
+
 function PANEL:Init()
     local size = screenScale(250)
     self:SetSize(size, size)
@@ -37,12 +44,28 @@ function PANEL:CreateCloseButton()
     end
 end
 
+function PANEL:CreateActionButton(text, col, hoverCol, doClick)
+    self.Button = vgui.Create("DButton", self)
+    self.Button:SetText("")
+    function self.Button:Paint(w, h)
+        draw.RoundedBox(screenScale(6), 0, 0, w, h, self:IsHovered() and hoverCol or col)
+        draw.SimpleText(text, "sVault.ActionButtion", w / 2, h * .48, svault.config.actionButtonTextCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    end
+    self.Button.DoClick = doClick
+end
+
 function PANEL:PerformLayout(w, h)
     if IsValid(self.Close) then
         local closeSize = screenScale(20)
         local closePad = screenScale(10)
         self.Close:SetSize(closeSize, closeSize)
         self.Close:SetPos(w - closeSize - closePad, closePad)
+    end
+
+    if IsValid(self.Button) then
+        local buttonH = screenScale(55)
+        self.Button:SetSize(w * .9, buttonH)
+        self.Button:SetPos(w * .05, h - buttonH - screenScale(14))
     end
 end
 
@@ -54,14 +77,8 @@ function PANEL:Paint(w, h)
     local headerH = screenScale(40)
     draw.RoundedBoxEx(screenScale(8), 0, 0, w, headerH, svault.config.uiHeaderCol, true, true)
     draw.SimpleText(self.Title, "sVault.FrameTitle", screenScale(9), headerH * .45, svault.config.uiTitleCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+    self:DrawContents(w * .05, headerH + h * .04, w * .9, h * .48)
 end
 
 vgui.Register("sVault.Frame", PANEL, "EditablePanel")
-
-if not IsValid(LocalPlayer()) then return end
-
-if IsValid(testPanel) then
-    testPanel:Remove()
-end
-
-testPanel = vgui.Create("sVault.SecurityAlert")
