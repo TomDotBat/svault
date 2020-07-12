@@ -169,8 +169,11 @@ function svault.raidmanager:StartRaidTimer(vault)
 end
 
 function svault.raidmanager:TriggerSecurity(vault)
+    svault.countermanager:SetupCounter(svault.raidmanager:GetVaultRaidID(vault))
+
     for k,v in ipairs(getPolice()) do
         v:sVaultNotify(svault.lang.vaultbreached)
+        svault.countermanager:AlertPoliceman(v, vault)
     end
 end
 

@@ -71,5 +71,6 @@ like to counter the raid?]]
 lang.raidprogressmessage = [[RAIDERS LEFT: #l
 POLICE JOINED: #j
 TIME LEFT: #t]]
+lang.waypoint = "VAULT RAID IN PROGRESS"
 
 return lang

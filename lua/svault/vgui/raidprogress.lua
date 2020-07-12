@@ -4,7 +4,9 @@ local PANEL = {}
 function PANEL:Init()
     self.Title = svault.lang.securityalert
     self:CreateActionButton(svault.lang.leaveraid, svault.config.leaveButtonCol, svault.config.leaveButtonHoverCol, function()
-        chat.AddText("poop")
+        net.Start("sVaultCounterLeave")
+         net.WriteUInt(self.counterID, 4)
+        net.SendToServer()
     end)
 end
 
@@ -37,10 +39,20 @@ end
 
 vgui.Register("sVault.RaidProgress", PANEL, "sVault.Frame")
 
-if not IsValid(LocalPlayer()) then return end
+net.Receive("sVaultCounterOpenProgress", function()
+    if IsValid(svault.raidprogress) then
+        svault.raidprogress:Remove()
+        svault.raidprogress = nil
+    end
 
-if IsValid(testPanel) then
-    testPanel:Remove()
-end
+    local counterID = net.ReadUInt(4)
+    svault.targetvault = net.ReadVector()
 
-testPanel = vgui.Create("sVault.RaidProgress")
+    if counterID == 0 then
+        svault.targetvault = false
+        return
+    end
+
+    svault.raidprogress = vgui.Create("sVault.RaidProgress")
+    svault.raidprogress.counterID = counterID
+end)

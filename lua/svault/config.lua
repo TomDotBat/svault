@@ -26,7 +26,7 @@ svault.config.vaultstartvalue = 900000 --The value the vault should spawn in wit
 svault.config.minvaultvalue = 900000 --The minimum money needed in the vault to start a raid
 svault.config.maxvaultvalue = 1000000 --The maximum money a vault can store at one time
 
-svault.config.policeteams = { --The teams that are classified as law enforcement
+svault.config.policeteams = { --The team NAMES that are classified as law enforcement
 	["CP"] = true,
 	["Policeman"] = true
 }
@@ -116,6 +116,10 @@ svault.config.counterButtonHoverCol = Color(57, 140, 75)
 svault.config.leaveButtonCol = Color(200, 64, 64)
 svault.config.leaveButtonHoverCol = Color(161, 52, 52)
 svault.config.actionButtonTextCol = Color(255, 255, 255)
+
+svault.config.waypointDotCol = Color(255, 255, 255)
+svault.config.waypointTextCol = Color(255, 255, 255)
+svault.config.waypointBackgroundCol = Color(236, 55, 58)
 
 --[[-------------------------------------------------------------------------
 End of sVault Configuration

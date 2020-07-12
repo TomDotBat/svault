@@ -5,7 +5,11 @@ function PANEL:Init()
     self.Title = svault.lang.securityalert
     self:CreateCloseButton()
     self:CreateActionButton(svault.lang.counterraid, svault.config.counterButtonCol, svault.config.counterButtonHoverCol, function()
-        chat.AddText("poop")
+        net.Start("sVaultCounterJoin")
+         net.WriteEntity(self.vault)
+        net.SendToServer()
+
+        self:Remove()
     end)
 end
 
@@ -36,3 +40,13 @@ function PANEL:DrawContents(x, y, w, h)
 end
 
 vgui.Register("sVault.SecurityAlert", PANEL, "sVault.Frame")
+
+net.Receive("sVaultCounterAlert", function()
+    if IsValid(svault.securityalert) then
+        svault.securityalert:Remove()
+        svault.securityalert = nil
+    end
+
+    svault.securityalert = vgui.Create("sVault.SecurityAlert")
+    svault.securityalert.vault = net.ReadEntity()
+end)
