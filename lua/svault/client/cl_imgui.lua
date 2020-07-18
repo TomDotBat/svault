@@ -13,13 +13,6 @@ imgui.skin = {
 	foregroundPress = Color(255, 80, 0),
 }
 
-local devCvar = GetConVar("developer")
-function imgui.IsDeveloperMode()
-	return not imgui.DisableDeveloperMode and devCvar:GetInt() > 0
-end
-
-local _devMode = false -- cached local variable updated once in a while
-
 function imgui.Hook(name, id, callback)
 	local hookUniqifier = debug.getinfo(4).short_src
 	hook.Add(name, "IMGUI / " .. id .. " / " .. hookUniqifier, callback)
@@ -84,9 +77,7 @@ function imgui.Start3D2D(pos, angles, scale, distanceHide, distanceFadeStart)
 		gState.shutdown = true
 		return false
 	end
-	
-	_devMode = imgui.IsDeveloperMode()
-	
+		
 	local eyePos = LocalPlayer():EyePos()
 	local eyePosToPos = pos - eyePos
 	
@@ -94,9 +85,7 @@ function imgui.Start3D2D(pos, angles, scale, distanceHide, distanceFadeStart)
 	do
 		local normal = angles:Up()
 		local dot = eyePosToPos:Dot(normal)
-		
-		if _devMode then gState._devDot = dot end
-		
+				
 		-- since normal is pointing away from surface towards viewer, dot<0 is visible
 		if dot >= 0 then
 			return false
@@ -108,11 +97,6 @@ function imgui.Start3D2D(pos, angles, scale, distanceHide, distanceFadeStart)
 		local distance = eyePosToPos:Length()
 		if distance > distanceHide then
 			return false
-		end
-		
-		if _devMode then
-			gState._devDist = distance
-			gState._devHideDist = distanceHide
 		end
 		
 		if distanceHide and distanceFadeStart and distance > distanceFadeStart then
@@ -149,8 +133,6 @@ function imgui.Start3D2D(pos, angles, scale, distanceHide, distanceFadeStart)
 			if obstructed and obstructer != gState.entity then
 				gState.mx = nil
 				gState.my = nil
-				
-				if _devMode then gState._devInputBlocker = "collision " .. obstructer:GetClass() .. "/" .. obstructer:EntIndex() end
 			else
 				local diff = pos - hitPos
 	
@@ -164,18 +146,12 @@ function imgui.Start3D2D(pos, angles, scale, distanceHide, distanceFadeStart)
 		else
 			gState.mx = nil
 			gState.my = nil
-			
-			if _devMode then gState._devInputBlocker = "not looking at plane" end
 		end
 	else
 		gState.mx = nil
 		gState.my = nil
-		
-		if _devMode then gState._devInputBlocker = "not hovering world" end
 	end
-	
-	if _devMode then gState._renderStarted = SysTime() end
-	
+		
 	return true
 end
 
@@ -219,86 +195,16 @@ function imgui.ExpandRenderBoundsFromRect(x, y, w, h)
 		local minrb, maxrb = calculateRenderBounds(x, y, w, h)
 		
 		ent:SetRenderBoundsWS(minrb, maxrb)
-		if _devMode then
-			print("[IMGUI] Updated renderbounds of ", ent, " to ", minrb, "x", maxrb)
-		end
-		
 		ent._imguiRBExpansion = {x, y, w, h}
-	else
-		if _devMode then
-			print("[IMGUI] Attempted to update renderbounds when entity is not valid!! ", debug.traceback())
-		end
-	end
-end
-
-local function drawDeveloperInfo()
-	local ang = LocalPlayer():EyeAngles()
-	ang:RotateAroundAxis(ang:Right(), 90)
-	ang:RotateAroundAxis(ang:Up(), -90)
-	
-	cam.IgnoreZ(true)
-	cam.Start3D2D(gState.pos + Vector(0, 0, 30), ang, 0.15)
-	surface.SetDrawColor(0, 0, 0, 200)
-	surface.DrawRect(-100, 0, 200, 140)
-	draw.SimpleText("imgui developer", "DefaultFixedDropShadow", 0, 5, Color(78, 205, 196), TEXT_ALIGN_CENTER, nil)
-	surface.SetDrawColor(78, 205, 196)
-	surface.DrawLine(-50, 16, 50, 16)
-	
-	local mx, my = gState.mx, gState.my
-	if mx and my then
-		draw.SimpleText(string.format("mouse: hovering %d x %d", mx, my), "DefaultFixedDropShadow", 0, 20, Color(0, 255, 0), TEXT_ALIGN_CENTER, nil)
-	else
-		draw.SimpleText(string.format("mouse: %s", gState._devInputBlocker or ""), "DefaultFixedDropShadow", 0, 20, Color(255, 0, 0), TEXT_ALIGN_CENTER, nil)
-	end
-	
-	local pos = gState.pos
-	draw.SimpleText(string.format("pos: %.2f %.2f %.2f", pos.x, pos.y, pos.z), "DefaultFixedDropShadow", 0, 40, nil, TEXT_ALIGN_CENTER, nil)
-	draw.SimpleText(string.format("distance %.2f / %.2f", gState._devDist or 0, gState._devHideDist or 0), "DefaultFixedDropShadow", 0, 53, Color(200, 200, 200, 200), TEXT_ALIGN_CENTER, nil)
-	
-	local ang = gState.angles
-	draw.SimpleText(string.format("ang: %.2f %.2f %.2f", ang.p, ang.y, ang.r), "DefaultFixedDropShadow", 0, 75, nil, TEXT_ALIGN_CENTER, nil)
-	draw.SimpleText(string.format("dot %d", gState._devDot or 0), "DefaultFixedDropShadow", 0, 88, Color(200, 200, 200, 200), TEXT_ALIGN_CENTER, nil)
-	
-	local angToEye = (pos - LocalPlayer():EyePos()):Angle()
-	angToEye:RotateAroundAxis(ang:Up(), -90)
-	angToEye:RotateAroundAxis(ang:Right(), 90)
-	
-	draw.SimpleText(string.format("angle to eye (%d,%d,%d)", angToEye.p, angToEye.y, angToEye.r), "DefaultFixedDropShadow", 0, 100, Color(200, 200, 200, 200), TEXT_ALIGN_CENTER, nil)
-	
-	draw.SimpleText(string.format("rendertime avg: %.2fms", (gState._devBenchAveraged or 0) * 1000), "DefaultFixedDropShadow", 0, 120, nil, TEXT_ALIGN_CENTER, nil)
-	
-	cam.End3D2D()
-	cam.IgnoreZ(false)
-	
-	local ent = gState.entity
-	if IsValid(ent) and ent._imguiRBExpansion then
-		local ex, ey, ew, eh = unpack(ent._imguiRBExpansion)
-		local minrb, maxrb = calculateRenderBounds(ex, ey, ew, eh)
-		render.DrawWireframeBox(Vector(0, 0, 0), Angle(0, 0, 0), minrb, maxrb, Color(0, 0, 255))
 	end
 end
 
 function imgui.End3D2D()
-	if gState then
-		if _devMode then
-			local renderTook = SysTime() - gState._renderStarted
-			gState._devBenchTests = (gState._devBenchTests or 0) + 1
-			gState._devBenchTaken = (gState._devBenchTaken or 0) + renderTook
-			if gState._devBenchTests == 100 then
-				gState._devBenchAveraged = gState._devBenchTaken / 100
-				gState._devBenchTests = 0
-				gState._devBenchTaken = 0
-			end
-		end
-		
+	if gState then		
 		gState.rendering = false
 		cam.End3D2D()
 		render.SetBlend(1)
 		surface.SetAlphaMultiplier(1)
-		
-		if _devMode then
-			drawDeveloperInfo()
-		end
 	end
 end
 
