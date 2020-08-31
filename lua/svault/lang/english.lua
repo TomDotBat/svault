@@ -72,5 +72,6 @@ lang.raidprogressmessage = [[RAIDERS LEFT: #l
 POLICE JOINED: #j
 TIME LEFT: #t]]
 lang.waypoint = "VAULT RAID IN PROGRESS"
+lang.npcname = "DIRTY BANKER"
 
 return lang

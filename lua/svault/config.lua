@@ -8,7 +8,7 @@ svault.config = {} --Don't touch this line
 Language
 ---------------------------------------------------------------------------]]
 --Use the file name from the lang folder, make sure to remove the .lua extension
---Currently available languages: english
+--Currently available languages: english, dutch, french, polish, turkish, russian
 svault.config.language = "english"
 
 --[[-------------------------------------------------------------------------

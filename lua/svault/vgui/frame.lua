@@ -21,7 +21,7 @@ surface.CreateFont("sVault.ActionButtion", {
 })
 
 function PANEL:Init()
-    local size = screenScale(250)
+    local size = screenScale(220)
     self:SetSize(size, size)
     self:SetPos(ScrW() - size - screenScale(30), ScrH() / 2 - size / 2)
 

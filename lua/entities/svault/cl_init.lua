@@ -172,7 +172,7 @@ function ENT:Draw()
         draw.SimpleText(svault.lang.securitysystem, "sVaultSmallTitle", w * .06 + 40 + 100 + 30, offy + sh * .55 + 30, svault.config.textCol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText(security and svault.lang.enabled or svault.lang.disabled, "sVaultSmallTitle", w * .06 + w * .88 - 40, offy + sh * .55 + 30, security and svault.config.onCol or svault.config.offCol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
         draw.RoundedBox(20, w * .06, offy + sh * 1.4, w * .88, 40, svault.config.primaryCol)
-        
+
         if state == VAULT_RAIDING then
             draw.DrawText(svault.lang.alertcps, "sVaultSecurityMessage", w * .5, offy + sh * 1.4 + 40, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
@@ -190,7 +190,7 @@ function ENT:Draw()
                 draw.DrawText(svault.lang.securitydisabledmsg, "sVaultSecurityMessage", w * .5, offy + sh * 1.4 + 110, svault.config.textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
             end
         end
-        
+
         draw.RoundedBox(20, w * .06, offy + sh * 1.4 + msgh + 40 + sth, w * .88, 40, svault.config.primaryCol)
         offy = offy + sh * 1.4 + msgh + 40 + sth + 40 + spacing
 

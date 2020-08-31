@@ -30,9 +30,15 @@ function PANEL:DrawContents(x, y, w, h)
     surface.SetFont("sVault.RaidProgress")
     local msgH = select(2, surface.GetTextSize(msg))
 
-    msg = string.Replace(msg, "#l", 8)
-    msg = string.Replace(msg, "#j", 5)
-    msg = string.Replace(msg, "#t", formatTime(10000))
+    if not IsValid(svault.countervault) then
+        msg = string.Replace(msg, "#l", "???")
+        msg = string.Replace(msg, "#j", "???")
+        msg = string.Replace(msg, "#t", "??:??")
+    else
+        msg = string.Replace(msg, "#l", #svault.countervault.Robbers)
+        msg = string.Replace(msg, "#j", 5)
+        msg = string.Replace(msg, "#t", formatTime(self:GetTimerEnd()))
+    end
 
     draw.DrawText(msg, "sVault.RaidProgress", x + w / 2, y + h / 2 - msgH / 2, color_white, TEXT_ALIGN_CENTER)
 end
@@ -52,6 +58,8 @@ net.Receive("sVaultCounterOpenProgress", function()
         svault.targetvault = false
         return
     end
+
+    svault.countervault = net.ReadEntity()
 
     svault.raidprogress = vgui.Create("sVault.RaidProgress")
     svault.raidprogress.counterID = counterID

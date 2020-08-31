@@ -34,6 +34,7 @@ function svault.countermanager:Join(ply, vault, counterID)
     net.Start("sVaultCounterOpenProgress")
      net.WriteUInt(counterID, 4)
      net.WriteVector(vault:GetPos())
+     net.WriteEntity(vault)
     net.Send(ply)
 
     self.counters[counterID][ply:SteamID64()] = true
@@ -53,7 +54,7 @@ end
 net.Receive("sVaultCounterJoin", function(len, ply)
     local vault = net.ReadEntity()
     if not IsValid(vault) then return end
-    if vault:GetClass() != "svault" then continue end
+    if vault:GetClass() != "svault" then return end
 
     if not isPolice(ply) then return end
 
@@ -87,3 +88,4 @@ util.AddNetworkString("sVaultCounterAlert")
 util.AddNetworkString("sVaultCounterJoin")
 util.AddNetworkString("sVaultCounterOpenProgress")
 util.AddNetworkString("sVaultCounterLeave")
+util.AddNetworkString("sVaultCounterFinish")
